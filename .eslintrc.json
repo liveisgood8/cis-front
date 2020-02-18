@@ -8,6 +8,7 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended",
         "google"
     ],
     "globals": {
@@ -28,6 +29,12 @@
     ],
     "rules": {
         "require-jsdoc": "off",
+        "indent": [ "warn", 
+            2,
+            {
+                "SwitchCase": 1
+            }
+        ],
         "valid-jsdoc": [
             "warn",
             {
@@ -48,6 +55,7 @@
         "@typescript-eslint/interface-name-prefix": [
             "error",
             "always"
-        ]
+        ],
+        "no-unused-vars" : "off"
     }
 }
