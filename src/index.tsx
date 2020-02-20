@@ -11,8 +11,8 @@ const store = configStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <App />
     <Routes browserHistory={history} />
+    <App />
   </Provider>,
   document.getElementById('root'));
 

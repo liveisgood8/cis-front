@@ -1,6 +1,7 @@
-import { IAuthenticateState, IUser, AuthenticateActions, AuthenticateActionTypes } from './types';
+import { IAuthenticateState, AuthenticateActions, AuthenticateActionTypes } from './types';
+import { getAuthenticatedUser } from '../../services/auth.service';
 
-const user = localStorage.getItem('user') as IUser | null;
+const user = getAuthenticatedUser();
 const initialState: IAuthenticateState = user ?
   { loggingIn: false, user: user } : { loggingIn: false };
 
