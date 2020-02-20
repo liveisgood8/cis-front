@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { IApplicationState } from '..';
+import { IApplicationState } from '../config-reducers';
 import { AuthenticateActions, AuthenticateActionTypes } from './types';
 import { login } from '../../services/user.service';
 
