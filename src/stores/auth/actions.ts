@@ -1,19 +1,20 @@
 import { ThunkAction } from 'redux-thunk';
 import { IApplicationState } from '../config-reducers';
-import { AuthenticateActions, AuthenticateActionTypes } from './types';
 import { login } from '../../services/auth.service';
+import { createAction, Action } from '@reduxjs/toolkit';
+import { IUser } from './types';
+
+export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
+export const loginSuccessAction = createAction<IUser, '@@auth/loginSuccess'>('@@auth/loginSuccess');
+
+export type LoginAsyncThunk = ThunkAction<Promise<void>, IApplicationState, unknown, Action<string>>;
 
 export const loginAsync = (
   username: string,
   password: string,
-): ThunkAction<Promise<void>, IApplicationState, unknown, AuthenticateActions> => async (dispatch): Promise<void> => {
-  dispatch({
-    type: AuthenticateActionTypes.LOGIN_REQUEST,
-  });
+): LoginAsyncThunk => async (dispatch): Promise<void> => {
+  dispatch(loginRequestAction());
 
   const user = await login(username, password);
-  dispatch({
-    type: AuthenticateActionTypes.LOGIN_SUCCESS,
-    user: user,
-  });
+  dispatch(loginSuccessAction(user));
 };

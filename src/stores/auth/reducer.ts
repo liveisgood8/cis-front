@@ -1,30 +1,18 @@
-import { IAuthenticateState, AuthenticateActions, AuthenticateActionTypes } from './types';
 import { getAuthenticatedUser } from '../../services/auth.service';
+import { loginRequestAction, loginSuccessAction } from './actions';
+import { createReducer } from '@reduxjs/toolkit';
+import { IAuthenticateState } from './types';
 
 const user = getAuthenticatedUser();
 const initialState: IAuthenticateState = user ?
   { loggingIn: false, user: user } : { loggingIn: false };
 
-export function authenticateReducer(
-  state: IAuthenticateState = initialState,
-  action: AuthenticateActions,
-): IAuthenticateState {
-  switch (action.type) {
-    case AuthenticateActionTypes.LOGIN_REQUEST:
-      return {
-        loggingIn: true,
-      };
-    case AuthenticateActionTypes.LOGIN_SUCCESS:
-      return {
-        loggingIn: false,
-        user: action.user,
-      };
-    case AuthenticateActionTypes.LOGIN_FAIL:
-      return {
-        loggingIn: false,
-        errors: action.errors,
-      };
-    default:
-      return state;
-  }
-};
+export const authenticateReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(loginRequestAction, (state) => ({ ...state, loggingIn: true }))
+    .addCase(loginSuccessAction, (state, action) => ({
+      ...state,
+      loggingIn: false,
+      user: action.payload,
+    }));
+});

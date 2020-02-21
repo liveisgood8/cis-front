@@ -2,10 +2,10 @@ import React from 'react';
 import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
-import { loginAsync } from '../../stores/auth/actions';
-import { ThunkAction } from 'redux-thunk';
+import { loginAsync, LoginAsyncThunk } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
-import { AuthenticateActions, IUser } from '../../stores/auth/types';
+import { IUser } from '../../stores/auth/types';
+import { Link } from 'react-router-dom';
 
 interface IStateProps {
   loggingIn: boolean;
@@ -22,7 +22,7 @@ const mapDispatch = {
   login: (
     username: string,
     password: string,
-  ): ThunkAction<Promise<void>, IApplicationState, unknown, AuthenticateActions> =>
+  ): LoginAsyncThunk =>
     loginAsync(username, password),
 };
 
@@ -41,27 +41,34 @@ export class LoginPath extends React.Component<PropsFromRedux> {
 
   public render(): JSX.Element {
     return (
-      <Container className="d-flex min-vh-100">
-        <Row className="flex-grow-1 align-items-center">
+      <Container className="d-flex min-vh-100 flex-column">
+        <Row className="flex-grow-1 flex-column justify-content-center">
           <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
-            className="d-flex flex-column p-2 border rounded shadow-sm">
-            <span className="mb-3 align-self-center">Вход в систему</span>
-            <InputGroup className="mb-2">
+            className="d-flex flex-column p-4 border rounded shadow-sm bg-white mb-4">
+            <p className="mb-3 mt-2 align-self-center font-weight-bold">Вход в систему</p>
+            <InputGroup className="mb-3">
               <FormControl
                 placeholder="Логин"
               />
             </InputGroup>
-            <InputGroup className="mb-2">
+            <InputGroup className="mb-3">
               <FormControl
                 placeholder="Пароль"
               />
             </InputGroup>
             <Button
-              className="w-25 align-self-end"
               disabled={this.props.loggingIn}
               onClick={this.onLogin.bind(this)}>
               {this.props.loggingIn ? 'Вход...' : 'Вход'}
             </Button>
+          </Col>
+          <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
+            className="d-flex justify-content-center p-2 border rounded shadow-sm bg-white">
+            <p className="m-0">
+              Нет аккаунта?&nbsp;
+              <Link to={'/registration'}>Зарегистрироваться</Link>
+              .
+            </p>
           </Col>
         </Row>
       </Container>
