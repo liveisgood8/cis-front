@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router';
+import { getAuthenticatedUser } from '../services/auth.service';
 
 export const PrivateRoute: React.FC<RouteProps> = (props) => {
-  const isAuthenticated = false;
+  const isAuthenticated = getAuthenticatedUser() !== null;
 
   let redirectPath = '';
   if (!isAuthenticated) {
