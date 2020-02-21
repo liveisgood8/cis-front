@@ -6,7 +6,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import { PrivateRoute } from './private-route';
 import HomePage from '../pages/home-page';
 import LoginPage from '../pages/login-page';
-import NotFoundedPage from '../pages/NotFoundedPage';
+import NotFoundedPage from '../pages/not-founded-page';
 
 interface IRoutesProps {
   browserHistory: History;
