@@ -33,7 +33,7 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>
 
-export class LoginPath extends React.Component<PropsFromRedux> {
+export class LoginPage extends React.Component<PropsFromRedux> {
   private onLogin(): void {
     this.props.login('1', '2');
   }
@@ -75,4 +75,4 @@ export class LoginPath extends React.Component<PropsFromRedux> {
   }
 }
 
-export default connector(LoginPath);
+export default connector(LoginPage);
