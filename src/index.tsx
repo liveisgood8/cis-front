@@ -1,7 +1,7 @@
 import './index.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './components/app/app';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import configStore, { history } from './stores/config-store';
@@ -12,7 +12,6 @@ const store = configStore();
 ReactDOM.render(
   <Provider store={store}>
     <Routes browserHistory={history} />
-    <App />
   </Provider>,
   document.getElementById('root'));
 
