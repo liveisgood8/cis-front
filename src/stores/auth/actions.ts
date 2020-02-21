@@ -3,6 +3,7 @@ import { IApplicationState } from '../config-reducers';
 import { login } from '../../services/auth.service';
 import { createAction, Action } from '@reduxjs/toolkit';
 import { IUser } from './types';
+import { push } from 'connected-react-router';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IUser, '@@auth/loginSuccess'>('@@auth/loginSuccess');
@@ -18,4 +19,5 @@ export const loginAsync = (
 
   const user = await login(username, password);
   dispatch(loginSuccessAction(user));
+  dispatch(push('/'));
 };

@@ -47,10 +47,17 @@ describe('auth actions', () => {
     const expectedActions = [
       { type: loginRequestAction.type },
       { type: loginSuccessAction.type, payload: user },
+      {
+        type: '@@router/CALL_HISTORY_METHOD', payload: {
+          args: ['/'],
+          method: 'push',
+        },
+      },
     ];
 
     const store = mockStore({
       auth: {},
+      route: {},
     });
 
     loginAsync('user', 'password');

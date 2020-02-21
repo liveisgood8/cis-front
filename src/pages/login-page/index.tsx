@@ -35,7 +35,6 @@ type PropsFromRedux = ConnectedProps<typeof connector>
 
 export class LoginPath extends React.Component<PropsFromRedux> {
   private onLogin(): void {
-    console.log('login');
     this.props.login('1', '2');
   }
 
