@@ -1,5 +1,5 @@
 import { getAuthenticatedUser } from '../../services/auth.service';
-import { loginRequestAction, loginSuccessAction } from './actions';
+import { loginRequestAction, loginSuccessAction, loginFailedAction } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 import { IAuthenticateState } from './types';
 
@@ -14,5 +14,10 @@ export const authenticateReducer = createReducer(initialState, (builder) => {
       ...state,
       loggingIn: false,
       user: action.payload,
+    }))
+    .addCase(loginFailedAction, (state, action) => ({
+      ...state,
+      loggingIn: false,
+      error: action.payload,
     }));
 });

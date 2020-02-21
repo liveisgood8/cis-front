@@ -11,7 +11,7 @@ export enum AuthenticateActionTypes {
 export interface IAuthenticateState {
   readonly loggingIn: boolean;
   readonly user?: IUser;
-  readonly errors?: string;
+  readonly error?: Error;
 }
 
 
