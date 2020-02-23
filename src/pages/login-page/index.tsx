@@ -12,6 +12,11 @@ interface IStateProps {
   user?: IUser;
 }
 
+interface ILoginPageState {
+  login: string;
+  password: string;
+}
+
 const mapState = (state: IApplicationState): IStateProps => ({
   loggingIn: state.auth.loggingIn,
   user: state.auth.user,
@@ -31,11 +36,43 @@ const connector = connect(
   mapDispatch,
 );
 
-export type PropsFromRedux = ConnectedProps<typeof connector>
+export type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class LoginPage extends React.Component<PropsFromRedux> {
+export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> {
+  constructor(props: PropsFromRedux) {
+    super(props);
+    this.state = {
+      login: '',
+      password: '',
+    };
+  }
+
   private onLogin(): void {
-    this.props.login('1', '2');
+    console.log(this.state);
+    this.props.login(this.state.login, this.state.password);
+  }
+
+  shouldComponentUpdate(nextProps: PropsFromRedux, nextState: ILoginPageState): boolean {
+    if (nextState?.login !== this.state?.login ||
+      nextState?.password !== this.state?.password
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  handleLoginChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    this.setState({
+      ...this.state,
+      login: e.target.value,
+    });
+  }
+
+  handlePasswordChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    this.setState({
+      ...this.state,
+      password: e.target.value,
+    });
   }
 
   public render(): JSX.Element {
@@ -48,11 +85,13 @@ export class LoginPage extends React.Component<PropsFromRedux> {
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Логин"
+                onChange={this.handleLoginChange.bind(this)}
               />
             </InputGroup>
             <InputGroup className="mb-3">
               <FormControl
                 placeholder="Пароль"
+                onChange={this.handlePasswordChange.bind(this)}
               />
             </InputGroup>
             <Button

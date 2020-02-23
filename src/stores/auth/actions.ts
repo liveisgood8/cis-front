@@ -4,10 +4,12 @@ import { login } from '../../services/auth.service';
 import { createAction, Action } from '@reduxjs/toolkit';
 import { IUser } from './types';
 import { push } from 'connected-react-router';
+import { addToastAction } from '../toast/actions';
+import { AxiosError } from 'axios';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IUser, '@@auth/loginSuccess'>('@@auth/loginSuccess');
-export const loginFailedAction = createAction<Error, '@@auth/loginFailed'>('@@auth/loginFailed');
+export const loginFailedAction = createAction<void, '@@auth/loginFailed'>('@@auth/loginFailed');
 
 export type LoginAsyncThunk = ThunkAction<Promise<void>, IApplicationState, unknown, Action<string>>;
 
@@ -16,8 +18,29 @@ export const loginAsync = (
   password: string,
 ): LoginAsyncThunk => async (dispatch): Promise<void> => {
   dispatch(loginRequestAction());
+  if (!username || !login) {
+    dispatch(addToastAction({
+      type: 'danger',
+      title: 'Ошибка входа',
+      message: 'Поля с логином и паролем должны быть заполнены',
+    }));
+    dispatch(loginFailedAction());
+    return;
+  }
 
-  const user = await login(username, password);
-  dispatch(loginSuccessAction(user));
-  dispatch(push('/'));
+  login(username, password)
+    .then((user) => {
+      dispatch(loginSuccessAction(user));
+      dispatch(push('/'));
+    })
+    .catch((err: AxiosError) => {
+      dispatch(loginFailedAction());
+      dispatch(addToastAction({
+        type: 'danger',
+        title: 'Ошибка входа',
+        message: err.response?.data?.error,
+      }));
+    });
+
+  
 };

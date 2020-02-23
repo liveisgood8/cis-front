@@ -1,9 +1,12 @@
 import { IUser } from '../stores/auth/types';
+import { AxiosService } from './axios.service';
 
 export async function login(username: string, password: string): Promise<IUser> {
-  const user: IUser = {
-    name: 'user',
-  };
+  const response = await AxiosService.post('/auth/login', {
+    login: username,
+    password: password,
+  });
+  const user: IUser = response.data;
   localStorage.setItem('user', JSON.stringify(user));
   return user;
 }
