@@ -31,7 +31,7 @@ const connector = connect(
   mapDispatch,
 );
 
-type PropsFromRedux = ConnectedProps<typeof connector>
+export type PropsFromRedux = ConnectedProps<typeof connector>
 
 export class LoginPage extends React.Component<PropsFromRedux> {
   private onLogin(): void {
