@@ -34,14 +34,13 @@ describe('auth reducer', () => {
   });
 
   it('login failed handle', () => {
-    const error = new Error('test');
     const expectedState: IAuthenticateState = {
       loggingIn: false,
       user: undefined,
-      error: error,
+      error: 'test',
     };
     expect(authenticateReducer({
       loggingIn: true,
-    }, loginFailedAction(error))).toEqual(expectedState);
+    }, loginFailedAction())).toEqual(expectedState);
   });
 });

@@ -31,13 +31,12 @@ describe('auth actions', () => {
   });
 
   it('login failed', () => {
-    const error = new Error('test');
     const expectedAction = {
       type: loginFailedAction.type,
-      payload: error,
+      payload: 'error',
     };
 
-    expect(loginFailedAction(error)).toEqual(expectedAction);
+    expect(loginFailedAction('error')).toEqual(expectedAction);
   });
 
   it('login async', async () => {

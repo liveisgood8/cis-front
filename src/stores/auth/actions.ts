@@ -9,7 +9,7 @@ import { AxiosError } from 'axios';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IUser, '@@auth/loginSuccess'>('@@auth/loginSuccess');
-export const loginFailedAction = createAction<void, '@@auth/loginFailed'>('@@auth/loginFailed');
+export const loginFailedAction = createAction<string, '@@auth/loginFailed'>('@@auth/loginFailed');
 
 export type LoginAsyncThunk = ThunkAction<Promise<void>, IApplicationState, unknown, Action<string>>;
 
@@ -19,12 +19,13 @@ export const loginAsync = (
 ): LoginAsyncThunk => async (dispatch): Promise<void> => {
   dispatch(loginRequestAction());
   if (!username || !login) {
+    const errorMessage = 'Поля с логином и паролем должны быть заполнены';
     dispatch(addToastAction({
       type: 'danger',
       title: 'Ошибка входа',
-      message: 'Поля с логином и паролем должны быть заполнены',
+      message: errorMessage,
     }));
-    dispatch(loginFailedAction());
+    dispatch(loginFailedAction(errorMessage));
     return;
   }
 
@@ -34,13 +35,11 @@ export const loginAsync = (
       dispatch(push('/'));
     })
     .catch((err: AxiosError) => {
-      dispatch(loginFailedAction());
+      dispatch(loginFailedAction(err.response?.data?.error));
       dispatch(addToastAction({
         type: 'danger',
         title: 'Ошибка входа',
         message: err.response?.data?.error,
       }));
     });
-
-  
 };
