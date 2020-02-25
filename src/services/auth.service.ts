@@ -1,24 +1,24 @@
-import { IUser } from '../stores/auth/types';
+import { IUser, IAuthData } from '../stores/auth/types';
 import { AxiosService } from './axios.service';
 
-export async function login(username: string, password: string): Promise<IUser> {
+export async function login(username: string, password: string): Promise<IAuthData> {
   const response = await AxiosService.post('/auth/login', {
     login: username,
     password: password,
   });
-  const user: IUser = response.data;
-  localStorage.setItem('user', JSON.stringify(user));
-  return user;
+  const authData: IAuthData = response.data;
+  localStorage.setItem('authData', JSON.stringify(authData));
+  return authData;
 }
 
 export function logout(): void {
-  localStorage.removeItem('user');
+  localStorage.removeItem('authData');
 }
 
-export function getAuthenticatedUser(): IUser | null {
-  const localStorageUser = localStorage.getItem('user');
-  if (localStorageUser) {
-    return JSON.parse(localStorageUser);
+export function getAuthenticateData(): IUser | null {
+  const authData = localStorage.getItem('authData');
+  if (authData) {
+    return JSON.parse(authData);
   }
   return null;
 }

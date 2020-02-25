@@ -1,11 +1,11 @@
-import { getAuthenticatedUser } from '../../services/auth.service';
+import { getAuthenticateData } from '../../services/auth.service';
 import { loginRequestAction, loginSuccessAction, loginFailedAction } from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 import { IAuthenticateState } from './types';
 
-const user = getAuthenticatedUser();
-const initialState: IAuthenticateState = user ?
-  { loggingIn: false, user: user } : { loggingIn: false };
+const authData = getAuthenticateData();
+const initialState: IAuthenticateState = authData ?
+  { loggingIn: false, authData: authData } : { loggingIn: false };
 
 export const authenticateReducer = createReducer(initialState, (builder) => {
   builder
@@ -13,7 +13,7 @@ export const authenticateReducer = createReducer(initialState, (builder) => {
     .addCase(loginSuccessAction, (state, action) => ({
       ...state,
       loggingIn: false,
-      user: action.payload,
+      authData: action.payload,
     }))
     .addCase(loginFailedAction, (state, action) => ({
       ...state,

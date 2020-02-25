@@ -1,12 +1,12 @@
 import { authenticateReducer } from '../../../stores/auth/reducer';
-import { IAuthenticateState, IUser } from '../../../stores/auth/types';
+import { IAuthenticateState, IAuthData } from '../../../stores/auth/types';
 import { loginRequestAction, loginSuccessAction, loginFailedAction } from '../../../stores/auth/actions';
 
 describe('auth reducer', () => {
   it('default state', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: false,
-      user: undefined,
+      authData: undefined,
       error: undefined,
     };
     expect(authenticateReducer(undefined, { type: '' })).toEqual(expectedState);
@@ -15,32 +15,36 @@ describe('auth reducer', () => {
   it('login request handle', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: true,
-      user: undefined,
+      authData: undefined,
       error: undefined,
     };
     expect(authenticateReducer(undefined, loginRequestAction())).toEqual(expectedState);
   });
 
   it('login success handle', () => {
-    const user: IUser = {
-      name: 'test',
+    const authData: IAuthData = {
+      user: {
+        name: 'test',
+      },
+      accessToken: 'access',
+      refreshToken: 'refresh',
     };
     const expectedState: IAuthenticateState = {
       loggingIn: false,
-      user: user,
+      authData: authData,
       error: undefined,
     };
-    expect(authenticateReducer(undefined, loginSuccessAction(user))).toEqual(expectedState);
+    expect(authenticateReducer(undefined, loginSuccessAction(authData))).toEqual(expectedState);
   });
 
   it('login failed handle', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: false,
-      user: undefined,
+      authData: undefined,
       error: 'test',
     };
     expect(authenticateReducer({
       loggingIn: true,
-    }, loginFailedAction())).toEqual(expectedState);
+    }, loginFailedAction('test'))).toEqual(expectedState);
   });
 });

@@ -48,7 +48,6 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
   }
 
   private onLogin(): void {
-    console.log(this.state);
     this.props.login(this.state.login, this.state.password);
   }
 

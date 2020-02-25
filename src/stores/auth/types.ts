@@ -2,9 +2,15 @@ export interface IUser {
   name: string;
 }
 
+export interface IAuthData {
+  user: IUser;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface IAuthenticateState {
   readonly loggingIn: boolean;
-  readonly user?: IUser;
+  readonly authData?: IAuthData;
   readonly error?: string;
 }
 

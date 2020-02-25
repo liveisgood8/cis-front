@@ -1,12 +1,16 @@
-import { loginRequestAction, loginSuccessAction, loginFailedAction, loginAsync } from '../../../stores/auth/actions';
-import { IUser } from '../../../stores/auth/types';
+import { AnyAction } from 'redux';
 import createMockStore from 'redux-mock-store';
 import thunk, { ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import AxiosMock from 'axios-mock-adapter';
+import { IUser, IAuthData } from '../../../stores/auth/types';
+import { loginRequestAction, loginSuccessAction, loginFailedAction, loginAsync } from '../../../stores/auth/actions';
 import { IApplicationState } from '../../../stores/config-reducers';
+import { AxiosService } from '../../../services/axios.service';
 
 type DispatchExtension = ThunkDispatch<IApplicationState, void, AnyAction>;
 const mockStore = createMockStore<{}, DispatchExtension>([thunk]);
+
+const axiosMock = new AxiosMock(AxiosService);
 
 describe('auth actions', () => {
   it('login request', () => {
@@ -40,12 +44,16 @@ describe('auth actions', () => {
   });
 
   it('login async', async () => {
-    const user: IUser = {
-      name: 'user',
+    const authData: IAuthData = {
+      user: {
+        name: 'test',
+      },
+      accessToken: '__accessToken__',
+      refreshToken: '__refreshToken__',
     };
     const expectedActions = [
-      { type: loginRequestAction.type },
-      { type: loginSuccessAction.type, payload: user },
+      { type: loginRequestAction.type, payload: undefined },
+      { type: loginSuccessAction.type, payload: authData },
       {
         type: '@@router/CALL_HISTORY_METHOD', payload: {
           args: ['/'],
@@ -57,6 +65,15 @@ describe('auth actions', () => {
     const store = mockStore({
       auth: {},
       route: {},
+    });
+
+    axiosMock.onPost('/auth/login', {
+      login: 'user',
+      password: 'password',
+    }).replyOnce(200, {
+      user: authData.user,
+      accessToken: authData.accessToken,
+      refreshToken: authData.refreshToken,
     });
 
     loginAsync('user', 'password');
