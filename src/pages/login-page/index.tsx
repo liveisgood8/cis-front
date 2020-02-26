@@ -2,10 +2,11 @@ import React from 'react';
 import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
-import { loginAsync, LoginAsyncThunk } from '../../stores/auth/actions';
+import { loginAsync } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IUser } from '../../stores/auth/types';
 import { Link } from 'react-router-dom';
+import { AppThunkAction } from '../../types';
 
 interface IStateProps {
   loggingIn: boolean;
@@ -19,7 +20,6 @@ interface ILoginPageState {
 
 const mapState = (state: IApplicationState): IStateProps => ({
   loggingIn: state.auth.loggingIn,
-  user: state.auth.user,
 });
 
 
@@ -27,7 +27,7 @@ const mapDispatch = {
   login: (
     username: string,
     password: string,
-  ): LoginAsyncThunk =>
+  ): AppThunkAction<Promise<void>> =>
     loginAsync(username, password),
 };
 

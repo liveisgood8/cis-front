@@ -3,10 +3,10 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { History } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
-import { PrivateRoute } from './private-route';
 import HomePage from '../pages/home-page';
 import LoginPage from '../pages/login-page';
 import NotFoundedPage from '../pages/not-founded-page';
+import { PrivateLayoutRoute } from './private-layout-route';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -15,8 +15,8 @@ interface IRoutesProps {
 const Routes: React.SFC<IRoutesProps> = (props) => (
   <ConnectedRouter history={props.browserHistory}>
     <Switch>
-      <PrivateRoute exact path="/" component={HomePage} />
       <Route path="/login" component={LoginPage} />
+      <PrivateLayoutRoute exact path="/" component={HomePage} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>

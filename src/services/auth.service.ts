@@ -1,4 +1,4 @@
-import { IUser, IAuthData } from '../stores/auth/types';
+import { IAuthData } from '../stores/auth/types';
 import { AxiosService } from './axios.service';
 
 export async function login(username: string, password: string): Promise<IAuthData> {
@@ -15,7 +15,7 @@ export function logout(): void {
   localStorage.removeItem('authData');
 }
 
-export function getAuthenticateData(): IUser | null {
+export function getAuthenticateData(): IAuthData | null {
   const authData = localStorage.getItem('authData');
   if (authData) {
     return JSON.parse(authData);
