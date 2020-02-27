@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { changeViewTypeAction } from '../../stores/side-bar/actions';
-import { getContractsAsync } from '../../stores/business-entities/actions';
-import { IClient } from '../../stores/business-entities/types';
+import { getTasksAsync } from '../../stores/business-entities/actions';
+import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { ViewTypes } from '../../stores/side-bar/types';
 import { BaseEntitiesList } from './base-entities';
 
 interface IReduxProps {
   viewType: ViewTypes;
-  clients: IClient[];
+  contracts: IContract[];
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   viewType: state.sideBar.viewType,
-  clients: state.businessEntities.clients,
+  contracts: state.businessEntities.contracts,
 });
 
 const mapDispatch = {
-  getContractsAsync,
+  getTasksAsync,
   changeViewTypeAction,
 };
 
@@ -29,12 +29,16 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
-  private handleClientClick(client: IClient): void {
-    this.props.getContractsAsync()
+export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
+  private handleContractClick(contract: IContract): void {
+    this.props.getTasksAsync()
       .then(() => {
-        this.props.changeViewTypeAction(ViewTypes.Contracts);
+        this.props.changeViewTypeAction(ViewTypes.Tasks);
       });
+  }
+
+  private handleBackClick(): void {
+    this.props.changeViewTypeAction(ViewTypes.Clients);
   }
 
   private handleMenuClick(): void {
@@ -42,10 +46,10 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
   }
 
   private createEntities(): JSX.Element[] {
-    return this.props.clients.map((e, i) => {
+    return this.props.contracts.map((e, i) => {
       return (
         <li key={i}>
-          <button onClick={this.handleClientClick.bind(this, e)}>{e.name}</button>
+          <button onClick={this.handleContractClick.bind(this, e)}>{e.name}</button>
         </li>
       );
     });
@@ -54,11 +58,14 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
   private createControlMenu(): JSX.Element {
     return (
       <div>
-        <p>Клиенты</p>
+        <p>Договора</p>
         <li>
           <button onClick={this.handleMenuClick.bind(this)}>В меню</button>
         </li>
-      </div >
+        <li>
+          <button onClick={this.handleBackClick.bind(this)}>Клиенты</button>
+        </li>
+      </div>
     );
   }
 
@@ -76,4 +83,4 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
   }
 }
 
-export default connector(SideBarClients);
+export default connector(SideBarContracts);

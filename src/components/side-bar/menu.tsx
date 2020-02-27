@@ -50,27 +50,26 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
     ];
   }
 
-  private handleElementClick(element: IElement): void {
-    switch (element.viewType) {
-      case ViewTypes.Clients:
-        this.props.getClientsAsync().then(() => {
-          this.props.changeViewTypeAction(ViewTypes.Clients);
-        });
-        break;
-    }
+  private handleClientsClick(): void {
+    this.props.getClientsAsync().then(() => {
+      this.props.changeViewTypeAction(ViewTypes.Clients);
+    });
+  }
+
+  private handleRequestsClick(): void {
+    console.log('request click');
   }
 
   render(): JSX.Element {
     return (
       <ul className="list-unstyled components">
         <p>Основное меню</p>
-        {this.state.elements.map((e, i) => {
-          return (
-            <li key={i} className={undefined /* 'active' */}>
-              <a onClick={this.handleElementClick.bind(this, e)}>{e.name}</a>
-            </li>
-          );
-        })}
+        <li className={undefined /* 'active' */}>
+          <button onClick={this.handleClientsClick.bind(this)}>Клиенты</button>
+        </li>
+        <li className={undefined /* 'active' */}>
+          <button onClick={this.handleRequestsClick.bind(this)}>Обращения</button>
+        </li>
       </ul>
     );
   }

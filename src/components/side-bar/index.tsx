@@ -1,11 +1,12 @@
 import './sidebar.css';
+import { ConnectedProps, connect } from 'react-redux';
 import * as React from 'react';
 import { IApplicationState } from '../../stores/config-reducers';
-import { ConnectedProps } from 'react-redux';
-import { connect } from 'react-redux';
 import SideBarMenu from './menu';
 import { ViewTypes } from '../../stores/side-bar/types';
 import SideBarClients from './clients';
+import SideBarContracts from './contracts';
+import SideBarTasks from './tasks';
 
 interface IReduxProps {
   viewType: ViewTypes;
@@ -25,13 +26,13 @@ export class SideBar extends React.Component<PropsFromRedux, {}> {
   private getCurrentChild(): JSX.Element {
     switch (this.props.viewType) {
       case ViewTypes.Menu:
-        return (<SideBarMenu />);
+        return <SideBarMenu />;
       case ViewTypes.Clients:
         return <SideBarClients />;
       case ViewTypes.Contracts:
-        return <p>Contracts</p>;
+        return <SideBarContracts />;
       case ViewTypes.Tasks:
-        return <p>Tasks</p>;
+        return <SideBarTasks />;
     }
   }
 
