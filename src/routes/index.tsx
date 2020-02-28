@@ -16,7 +16,10 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
   <ConnectedRouter history={props.browserHistory}>
     <Switch>
       <Route path="/login" component={LoginPage} />
-      <PrivateLayoutRoute exact path="/" component={HomePage} />
+      <PrivateLayoutRoute path="/" component={HomePage} />
+      <PrivateLayoutRoute exact path="/clients" component={HomePage} />
+      <PrivateLayoutRoute path="/contracts" component={HomePage} />
+      <PrivateLayoutRoute path="/tasks" component={HomePage} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>

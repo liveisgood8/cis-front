@@ -9,7 +9,7 @@ import configStore, { history } from './stores/config-store';
 import Routes from './routes';
 import AlertPopup from './components/toast/toast';
 
-const store = configStore();
+export const store = configStore();
 
 ReactDOM.render(
   <Provider store={store}>

@@ -21,6 +21,7 @@
 }
 
 #sidebar .sidebar-header {
+  height: 80px;
   padding: 20px;
   background: #6d7fcc;
 }
@@ -102,6 +103,18 @@ margin: 40px 0;
 .side-bar-child.active {
   opacity: 1;
   transition: opacity 500ms;
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+}
+
+.side-bar-child::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+.side-bar-child::-webkit-scrollbar-thumb {
+  border-bottom-right-radius: 3px;
+  background-color: #6d7fcc;
 }
 
 

@@ -1,23 +1,24 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { changeViewTypeAction } from '../../stores/side-bar/actions';
+import { RouterState, push } from 'connected-react-router';
 import { ITask } from '../../stores/business-entities/types';
+import { getTasksAsync } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
-import { ViewTypes } from '../../stores/side-bar/types';
 import { BaseEntitiesList } from './base-entities';
+import { store } from '../..';
 
 interface IReduxProps {
-  viewType: ViewTypes;
   tasks: ITask[];
+  router: RouterState;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  viewType: state.sideBar.viewType,
   tasks: state.businessEntities.tasks,
+  router: state.router,
 });
 
 const mapDispatch = {
-  changeViewTypeAction,
+  getTasksAsync,
 };
 
 const connector = connect(
@@ -28,16 +29,34 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
+  private clientId: number | null = null;
+  private contractId: number | null = null;
+
+  constructor(props: PropsFromRedux) {
+    super(props);
+
+    const clientIdString = new URLSearchParams(this.props.router.location.search)
+      .get('clientId');
+    const contractIdString = new URLSearchParams(this.props.router.location.search)
+      .get('contractId');
+    if (clientIdString) {
+      this.clientId = parseInt(clientIdString);
+    }
+    if (contractIdString) {
+      this.contractId = parseInt(contractIdString);
+    }
+  }
+
   private handleTaskClick(task: ITask): void {
     console.log(task);
   }
 
   private handleBackClick(): void {
-    this.props.changeViewTypeAction(ViewTypes.Contracts);
+    store.dispatch(push(`/contracts?clientId=${this.clientId}`));
   }
 
   private handleMenuClick(): void {
-    this.props.changeViewTypeAction(ViewTypes.Menu);
+    store.dispatch(push('/'));
   }
 
   private createEntities(): JSX.Element[] {
@@ -62,6 +81,13 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
         </li>
       </div>
     );
+  }
+
+  componentDidMount(): void {
+    if (this.contractId) {
+      this.props.getTasksAsync(this.contractId);
+    }
+    super.componentDidMount();
   }
 
   render(): JSX.Element {

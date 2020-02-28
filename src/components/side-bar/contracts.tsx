@@ -1,25 +1,27 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { changeViewTypeAction } from '../../stores/side-bar/actions';
-import { getTasksAsync } from '../../stores/business-entities/actions';
+import { RouterState, push } from 'connected-react-router';
+import { store } from '../../index'
+import { getTasksAsync, getContractsAsync } from '../../stores/business-entities/actions';
 import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
-import { ViewTypes } from '../../stores/side-bar/types';
 import { BaseEntitiesList } from './base-entities';
 
 interface IReduxProps {
-  viewType: ViewTypes;
   contracts: IContract[];
+  router: RouterState;
 }
 
-const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  viewType: state.sideBar.viewType,
-  contracts: state.businessEntities.contracts,
-});
+const mapStateToProps = (state: IApplicationState): IReduxProps => {
+  return {
+    contracts: state.businessEntities.contracts,
+    router: state.router,
+  };
+};
 
 const mapDispatch = {
   getTasksAsync,
-  changeViewTypeAction,
+  getContractsAsync,
 };
 
 const connector = connect(
@@ -30,19 +32,28 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
+  private clientId: number | null = null;
+
+  constructor(props: PropsFromRedux) {
+    super(props);
+
+    const clientIdString = new URLSearchParams(this.props.router.location.search)
+      .get('clientId');
+    if (clientIdString) {
+      this.clientId = parseInt(clientIdString);
+    }
+  }
+
   private handleContractClick(contract: IContract): void {
-    this.props.getTasksAsync()
-      .then(() => {
-        this.props.changeViewTypeAction(ViewTypes.Tasks);
-      });
+    store.dispatch(push(`/tasks?clientId=${this.clientId}&contractId=${contract.id}`));
   }
 
   private handleBackClick(): void {
-    this.props.changeViewTypeAction(ViewTypes.Clients);
+    store.dispatch(push('/clients'));
   }
 
   private handleMenuClick(): void {
-    this.props.changeViewTypeAction(ViewTypes.Menu);
+    store.dispatch(push('/'));
   }
 
   private createEntities(): JSX.Element[] {
@@ -67,6 +78,13 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
         </li>
       </div>
     );
+  }
+
+  componentDidMount(): void {
+    if (this.clientId) {
+      this.props.getContractsAsync(this.clientId);
+    }
+    super.componentDidMount();
   }
 
   render(): JSX.Element {

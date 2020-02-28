@@ -1,25 +1,25 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import { changeViewTypeAction } from '../../stores/side-bar/actions';
-import { getContractsAsync } from '../../stores/business-entities/actions';
+import { getContractsAsync, getClientsAsync } from '../../stores/business-entities/actions';
 import { IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
-import { ViewTypes } from '../../stores/side-bar/types';
 import { BaseEntitiesList } from './base-entities';
+import { RouterState, push } from 'connected-react-router';
+import { store } from '../..';
 
 interface IReduxProps {
-  viewType: ViewTypes;
   clients: IClient[];
+  router: RouterState;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  viewType: state.sideBar.viewType,
   clients: state.businessEntities.clients,
+  router: state.router,
 });
 
 const mapDispatch = {
+  getClientsAsync,
   getContractsAsync,
-  changeViewTypeAction,
 };
 
 const connector = connect(
@@ -31,14 +31,11 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
   private handleClientClick(client: IClient): void {
-    this.props.getContractsAsync()
-      .then(() => {
-        this.props.changeViewTypeAction(ViewTypes.Contracts);
-      });
+    store.dispatch(push(`/contracts?clientId=${client.id}`));
   }
 
   private handleMenuClick(): void {
-    this.props.changeViewTypeAction(ViewTypes.Menu);
+    store.dispatch(push('/'));
   }
 
   private createEntities(): JSX.Element[] {
@@ -60,6 +57,11 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
         </li>
       </div >
     );
+  }
+
+  componentDidMount(): void {
+    this.props.getClientsAsync();
+    super.componentDidMount();
   }
 
   render(): JSX.Element {

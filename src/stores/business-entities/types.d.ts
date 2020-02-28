@@ -1,4 +1,5 @@
 export interface IBaseBusinessEntity {
+  id: number;
   name: string;
 }
 

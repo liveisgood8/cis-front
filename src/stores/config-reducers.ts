@@ -7,14 +7,11 @@ import { IToastState } from './toast/types';
 import { toastsReducer } from './toast/reducer';
 import { IBusinessEntities } from './business-entities/types';
 import { businessEntitiesReducer } from './business-entities/reducer';
-import { ISideBarState } from './side-bar/types';
-import { sideBarReducer } from './side-bar/reducer';
 
 export interface IApplicationState {
   router: RouterState;
   auth: IAuthenticateState;
   businessEntities: IBusinessEntities;
-  sideBar: ISideBarState;
   toasts: IToastState;
 }
 
@@ -23,7 +20,6 @@ const createRootReducer = (history: History) =>
     router: connectRouter(history),
     auth: authenticateReducer,
     businessEntities: businessEntitiesReducer,
-    sideBar: sideBarReducer,
     toasts: toastsReducer,
   });
 export default createRootReducer;

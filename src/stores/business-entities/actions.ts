@@ -24,19 +24,28 @@ export const getClientsAsync = (): AppThunkAction<Promise<void>> => async (dispa
     });
 };
 
-export const getContractsAsync = (): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
-  return AxiosService.get('/contracts/all')
-    .then((response) => {
-      dispatch(setContractsAction(response.data));
+export const getContractsAsync = (clientId: number): AppThunkAction<Promise<void>> =>
+  async (dispatch): Promise<void> => {
+    return AxiosService.get('/contracts/all', {
+      params: {
+        clientId,
+      },
     })
-    .catch((err: AxiosError) => {
-      dispatch(getEntitiesFailedAction(err.response?.data ||
-        'Неизвестная ошибка при попытке получить список договоров'));
-    });
+      .then((response) => {
+        dispatch(setContractsAction(response.data));
+      })
+      .catch((err: AxiosError) => {
+        dispatch(getEntitiesFailedAction(err.response?.data ||
+          'Неизвестная ошибка при попытке получить список договоров'));
+      });
 };
 
-export const getTasksAsync = (): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
-  return AxiosService.get('/tasks/all')
+export const getTasksAsync = (contractId: number): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
+  return AxiosService.get('/tasks/all', {
+    params: {
+      contractId,
+    },
+  })
     .then((response) => {
       dispatch(setTasksAction(response.data));
     })

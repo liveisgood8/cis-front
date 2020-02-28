@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { getClientsAsync, getContractsAsync, getTasksAsync } from '../../stores/business-entities/actions';
-import { changeViewTypeAction } from '../../stores/side-bar/actions';
 import { connect, ConnectedProps } from 'react-redux';
-import { ViewTypes } from '../../stores/side-bar/types';
+import { store } from '../..';
+import { push } from 'connected-react-router';
 
 interface IElement {
   name: string;
   url: string;
-  viewType?: ViewTypes;
 }
 
 interface ISideBarMenuState {
@@ -18,7 +17,6 @@ const mapDispatch = {
   getClientsAsync,
   getContractsAsync,
   getTasksAsync,
-  changeViewTypeAction,
 };
 
 const connector = connect(
@@ -41,7 +39,6 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
       {
         name: 'Клиенты',
         url: '#',
-        viewType: ViewTypes.Clients,
       },
       {
         name: 'Обращения',
@@ -51,9 +48,7 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
   }
 
   private handleClientsClick(): void {
-    this.props.getClientsAsync().then(() => {
-      this.props.changeViewTypeAction(ViewTypes.Clients);
-    });
+    store.dispatch(push('/clients'));
   }
 
   private handleRequestsClick(): void {
