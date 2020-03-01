@@ -34,7 +34,7 @@ class AddClientComponent extends React.Component<{}, IState> {
     } catch (err) {
       store.dispatch(addToastAction({
         title: 'Не удалось добавить клиента',
-        message: err.message,
+        message: err.response?.data.message || err.message,
         type: 'danger',
       }));
     }

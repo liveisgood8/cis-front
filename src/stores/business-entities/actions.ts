@@ -3,6 +3,7 @@ import { IClient, ITask, IContract } from './types';
 import { AppThunkAction } from '../../types';
 import { AxiosService } from '../../services/axios.service';
 import { AxiosError } from 'axios';
+import { addToastAction } from '../toast/actions';
 
 export const setClientsAction = createAction<IClient[], '@@businessEntities/setClients'>(
   '@@businessEntities/setClients');
@@ -18,17 +19,18 @@ export const addContractAction = createAction<IContract, '@@businessEntities/add
 export const addTaskAction = createAction<ITask, '@@businessEntities/addTask'>(
   '@@businessEntities/addTask');
 
-export const getEntitiesFailedAction = createAction<string, '@@businessEntities/getEntitiesError'>(
-  '@@businessEntities/getEntitiesError');
-
 export const getClientsAsync = (): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
   return AxiosService.get('/clients')
     .then((response) => {
       dispatch(setClientsAction(response.data));
     })
     .catch((err: AxiosError) => {
-      dispatch(getEntitiesFailedAction(err.response?.data ||
-        'Неизвестная ошибка при попытке получить список клиентов'));
+      dispatch(addToastAction({
+        title: 'Ошибка при получении списка клиентов',
+        message: err.response?.data.message ||
+          'Неизвестная ошибка при попытке получить список клиентов',
+        type: 'danger',
+      }));
     });
 };
 
@@ -43,8 +45,12 @@ export const getContractsAsync = (clientId: number): AppThunkAction<Promise<void
         dispatch(setContractsAction(response.data));
       })
       .catch((err: AxiosError) => {
-        dispatch(getEntitiesFailedAction(err.response?.data ||
-          'Неизвестная ошибка при попытке получить список договоров'));
+        dispatch(addToastAction({
+          title: 'Ошибка при получении списка клиентов',
+          message: err.response?.data.message ||
+            'Неизвестная ошибка при попытке получить список договоров',
+          type: 'danger',
+        }));
       });
   };
 
@@ -58,7 +64,11 @@ export const getTasksAsync = (contractId: number): AppThunkAction<Promise<void>>
       dispatch(setTasksAction(response.data));
     })
     .catch((err: AxiosError) => {
-      dispatch(getEntitiesFailedAction(err.response?.data ||
-        'Неизвестная ошибка при попытке получить список задач'));
+      dispatch(addToastAction({
+        title: 'Ошибка при получении списка клиентов',
+        message: err.response?.data.message ||
+        'Неизвестная ошибка при попытке получить список задач',
+        type: 'danger',
+      }));
     });
 };

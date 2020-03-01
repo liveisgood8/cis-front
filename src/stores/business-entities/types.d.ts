@@ -14,12 +14,13 @@ export interface IContract extends IBaseBusinessEntity {
 }
 
 export interface ITask extends IBaseBusinessEntity {
-  contract?: IContract;
+  contract: IContract;
+  doneTo: Date;
+  description: string;
 }
 
 export interface IBusinessEntities {
   clients: IClient[];
   contracts: IContract[];
   tasks: ITask[];
-  error?: string;
 }

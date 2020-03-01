@@ -88,7 +88,7 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
     } catch (err) {
       store.dispatch(addToastAction({
         title: 'Не удалось добавить договор',
-        message: err.message,
+        message: err.response?.data.message || err.message,
         type: 'danger',
       }));
     }

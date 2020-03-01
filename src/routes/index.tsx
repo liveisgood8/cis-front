@@ -9,6 +9,7 @@ import NotFoundedPage from '../pages/not-founded-page';
 import { PrivateLayoutRoute } from './private-layout-route';
 import AddClientComponent from '../components/add-client';
 import AddContractComponent from '../components/add-contract';
+import AddTaskComponent from '../components/add-task';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -21,6 +22,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/" component={HomePage} />
       <PrivateLayoutRoute exact path="/addClient" component={AddClientComponent} />
       <PrivateLayoutRoute exact path="/addContract" component={AddContractComponent} />
+      <PrivateLayoutRoute exact path="/addTask" component={AddTaskComponent} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>

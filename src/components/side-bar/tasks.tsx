@@ -100,6 +100,11 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
         </ul>
         <ul className="list-unstyled components">
           {this.createEntities()}
+          <li>
+            <a href={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+              Добавить задачу
+            </a>
+          </li>
         </ul>
       </div>
     );
