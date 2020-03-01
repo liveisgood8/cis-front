@@ -4,11 +4,13 @@ export interface IBaseBusinessEntity {
 }
 
 export interface IClient extends IBaseBusinessEntity {
-  comment: string;
+  comment?: string;
 }
 
 export interface IContract extends IBaseBusinessEntity {
   client?: IClient;
+  conclusionDate: Date;
+  comment?: string;
 }
 
 export interface ITask extends IBaseBusinessEntity {

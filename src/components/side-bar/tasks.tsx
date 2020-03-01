@@ -6,6 +6,7 @@ import { getTasksAsync } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { store } from '../..';
+import { ViewTypes } from '.';
 
 interface IReduxProps {
   tasks: ITask[];
@@ -52,7 +53,8 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
   }
 
   private handleBackClick(): void {
-    store.dispatch(push(`/contracts?clientId=${this.clientId}`));
+    store.dispatch(push(
+      `${this.props.router.location.pathname}?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`));
   }
 
   private handleMenuClick(): void {

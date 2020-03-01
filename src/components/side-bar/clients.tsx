@@ -1,20 +1,21 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
+import {  push } from 'connected-react-router';
 import { getContractsAsync, getClientsAsync } from '../../stores/business-entities/actions';
 import { IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
-import { RouterState, push } from 'connected-react-router';
 import { store } from '../..';
+import { ViewTypes } from './';
 
 interface IReduxProps {
   clients: IClient[];
-  router: RouterState;
+  routerPath: string;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   clients: state.businessEntities.clients,
-  router: state.router,
+  routerPath: state.router.location.pathname,
 });
 
 const mapDispatch = {
@@ -31,7 +32,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
   private handleClientClick(client: IClient): void {
-    store.dispatch(push(`/contracts?clientId=${client.id}`));
+    store.dispatch(push(
+      `${this.props.routerPath}?viewType=${ViewTypes.Contracts}&clientId=${client.id}`));
   }
 
   private handleMenuClick(): void {
@@ -72,6 +74,9 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
         </ul>
         <ul className="list-unstyled components">
           {this.createEntities()}
+          <li>
+            <a href={`/addClient?viewType=${ViewTypes.Clients}`}>Добавить клиента</a>
+          </li>
         </ul>
       </div>
     );

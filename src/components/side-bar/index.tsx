@@ -8,6 +8,13 @@ import SideBarClients from './clients';
 import SideBarContracts from './contracts';
 import SideBarTasks from './tasks';
 
+export enum ViewTypes {
+  Menu,
+  Clients,
+  Contracts,
+  Tasks,
+}
+
 interface IReduxProps {
   router: RouterState;
 }
@@ -23,18 +30,25 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBar extends React.Component<PropsFromRedux, {}> {
+  private getViewTypeFromRouter(): ViewTypes {
+    const viewTypeString = new URLSearchParams(this.props.router.location.search)
+      .get('viewType');
+    if (viewTypeString) {
+      return parseInt(viewTypeString);
+    }
+    return ViewTypes.Menu;
+  }
+
   private getCurrentChild(): JSX.Element {
-    switch (this.props.router.location.pathname) {
-      case '/':
+    switch (this.getViewTypeFromRouter()) {
+      case ViewTypes.Menu:
         return <SideBarMenu />;
-      case '/clients':
+      case ViewTypes.Clients:
         return <SideBarClients />;
-      case '/contracts':
+      case ViewTypes.Contracts:
         return <SideBarContracts />;
-      case '/tasks':
+      case ViewTypes.Tasks:
         return <SideBarTasks />;
-      default:
-        return <div></div>;
     }
   }
 

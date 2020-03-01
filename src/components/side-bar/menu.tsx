@@ -3,6 +3,8 @@ import { getClientsAsync, getContractsAsync, getTasksAsync } from '../../stores/
 import { connect, ConnectedProps } from 'react-redux';
 import { store } from '../..';
 import { push } from 'connected-react-router';
+import { IApplicationState } from '../../stores/config-reducers';
+import { ViewTypes } from '.';
 
 interface IElement {
   name: string;
@@ -13,6 +15,14 @@ interface ISideBarMenuState {
   elements: IElement[];
 }
 
+interface IReduxProps {
+  routerPath: string;
+}
+
+const mapStateToProps = (state: IApplicationState): IReduxProps => ({
+  routerPath: state.router.location.pathname,
+});
+
 const mapDispatch = {
   getClientsAsync,
   getContractsAsync,
@@ -20,7 +30,7 @@ const mapDispatch = {
 };
 
 const connector = connect(
-  null,
+  mapStateToProps,
   mapDispatch,
 );
 
@@ -48,7 +58,8 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
   }
 
   private handleClientsClick(): void {
-    store.dispatch(push('/clients'));
+    store.dispatch(push(
+      `${this.props.routerPath}?viewType=${ViewTypes.Clients}`));
   }
 
   private handleRequestsClick(): void {

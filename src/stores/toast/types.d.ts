@@ -7,7 +7,7 @@ export interface IToastDefinition {
     | 'info'
     | 'dark'
     | 'light';
-  title: string;
+  title?: string;
   message: string;
 }
 

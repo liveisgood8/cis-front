@@ -6,6 +6,7 @@ import { getTasksAsync, getContractsAsync } from '../../stores/business-entities
 import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
+import { ViewTypes } from '.';
 
 interface IReduxProps {
   contracts: IContract[];
@@ -45,11 +46,14 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
   }
 
   private handleContractClick(contract: IContract): void {
-    store.dispatch(push(`/tasks?clientId=${this.clientId}&contractId=${contract.id}`));
+    store.dispatch(push(
+      `${this.props.router.location.pathname}?viewType=${ViewTypes.Tasks}` +
+      `&clientId=${this.clientId}&contractId=${contract.id}`));
   }
 
   private handleBackClick(): void {
-    store.dispatch(push('/clients'));
+    store.dispatch(push(
+      `${this.props.router.location.pathname}?viewType=${ViewTypes.Clients}`));
   }
 
   private handleMenuClick(): void {
@@ -82,9 +86,11 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
 
   componentDidMount(): void {
     if (this.clientId) {
-      this.props.getContractsAsync(this.clientId);
+      this.props.getContractsAsync(this.clientId)
+        .then(() => {
+          super.componentDidMount();
+        });
     }
-    super.componentDidMount();
   }
 
   render(): JSX.Element {
@@ -95,6 +101,9 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
         </ul>
         <ul className="list-unstyled components">
           {this.createEntities()}
+          <li>
+            <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>Добавить договор</a>
+          </li>
         </ul>
       </div>
     );
