@@ -5,6 +5,7 @@ import { push } from 'connected-react-router';
 import { addToastAction } from '../toast/actions';
 import { AxiosError } from 'axios';
 import { AppThunkAction } from '../../types';
+import { handleAxiosError } from '../axios/actions';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IAuthData, '@@auth/loginSuccess'>('@@auth/loginSuccess');
@@ -34,10 +35,6 @@ export const loginAsync = (
     })
     .catch((err: AxiosError) => {
       dispatch(loginFailedAction(err.response?.data?.error));
-      dispatch(addToastAction({
-        type: 'danger',
-        title: 'Ошибка входа',
-        message: err.response?.data?.error,
-      }));
+      dispatch(handleAxiosError(err, 'Неизвестная ошибка при аутентификации'));
     });
 };

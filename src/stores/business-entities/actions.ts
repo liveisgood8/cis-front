@@ -3,7 +3,7 @@ import { IClient, ITask, IContract } from './types';
 import { AppThunkAction } from '../../types';
 import { AxiosService } from '../../services/axios.service';
 import { AxiosError } from 'axios';
-import { addToastAction } from '../toast/actions';
+import { handleAxiosError } from '../axios/actions';
 
 export const setClientsAction = createAction<IClient[], '@@businessEntities/setClients'>(
   '@@businessEntities/setClients');
@@ -25,12 +25,7 @@ export const getClientsAsync = (): AppThunkAction<Promise<void>> => async (dispa
       dispatch(setClientsAction(response.data));
     })
     .catch((err: AxiosError) => {
-      dispatch(addToastAction({
-        title: 'Ошибка при получении списка клиентов',
-        message: err.response?.data.message ||
-          'Неизвестная ошибка при попытке получить список клиентов',
-        type: 'danger',
-      }));
+      dispatch(handleAxiosError(err, 'Неизвестная ошибка при попытке получить список клиентов'));
     });
 };
 
@@ -45,12 +40,7 @@ export const getContractsAsync = (clientId: number): AppThunkAction<Promise<void
         dispatch(setContractsAction(response.data));
       })
       .catch((err: AxiosError) => {
-        dispatch(addToastAction({
-          title: 'Ошибка при получении списка клиентов',
-          message: err.response?.data.message ||
-            'Неизвестная ошибка при попытке получить список договоров',
-          type: 'danger',
-        }));
+        dispatch(handleAxiosError(err, 'Неизвестная ошибка при попытке получить список договоров'));
       });
   };
 
@@ -64,11 +54,6 @@ export const getTasksAsync = (contractId: number): AppThunkAction<Promise<void>>
       dispatch(setTasksAction(response.data));
     })
     .catch((err: AxiosError) => {
-      dispatch(addToastAction({
-        title: 'Ошибка при получении списка клиентов',
-        message: err.response?.data.message ||
-        'Неизвестная ошибка при попытке получить список задач',
-        type: 'danger',
-      }));
+      dispatch(handleAxiosError(err, 'Неизвестная ошибка при попытке получить список задач'));
     });
 };

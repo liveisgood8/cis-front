@@ -17,10 +17,12 @@ export enum ViewTypes {
 
 interface IReduxProps {
   router: RouterState;
+  isVisible: boolean;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   router: state.router,
+  isVisible: state.sideBar.isVisible,
 });
 
 const connector = connect(
@@ -54,9 +56,9 @@ export class SideBar extends React.Component<PropsFromRedux, {}> {
 
   render(): JSX.Element {
     return (
-      <nav id="sidebar">
+      <nav id="sidebar" className={this.props.isVisible ? 'active' : ''}>
         <div className="sidebar-header">
-          <h3>Система QCRM</h3>
+          <h4>Система QCRM</h4>
         </div>
 
         {this.getCurrentChild()}

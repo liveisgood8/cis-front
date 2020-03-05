@@ -2,12 +2,6 @@
     SIDEBAR STYLE
 ----------------------------------------------------- */
 
-.wrapper {
-  display: flex;
-  width: 100%;
-  align-items: stretch;
-}
-
 #sidebar {
   min-width: 250px;
   max-width: 250px;
@@ -154,7 +148,9 @@ margin: 40px 0;
 
 @media (max-width: 768px) {
   #sidebar {
-      margin-left: -250px;
+      min-width: 230px;
+      max-width: 230px;
+      margin-left: -230px;
   }
   #sidebar.active {
       margin-left: 0;

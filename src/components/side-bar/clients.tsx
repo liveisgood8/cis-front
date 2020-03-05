@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import {  push } from 'connected-react-router';
-import { getContractsAsync, getClientsAsync } from '../../stores/business-entities/actions';
+import { getClientsAsync } from '../../stores/business-entities/actions';
 import { IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
@@ -20,7 +20,6 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => ({
 
 const mapDispatch = {
   getClientsAsync,
-  getContractsAsync,
 };
 
 const connector = connect(
