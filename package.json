@@ -41,7 +41,6 @@
     "react-redux-toastr": "^7.6.4",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
-    "redux-notifications": "^4.0.1",
     "redux-thunk": "^2.3.0",
     "typescript": "^3.7.5"
   },
