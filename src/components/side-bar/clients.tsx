@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
-import {  push } from 'connected-react-router';
+import { push } from 'connected-react-router';
 import { getClientsAsync } from '../../stores/business-entities/actions';
 import { IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { store } from '../..';
 import { ViewTypes } from './';
+import { faBars, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface IReduxProps {
   clients: IClient[];
@@ -54,7 +56,10 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
       <div>
         <p>Клиенты</p>
         <li>
-          <button onClick={this.handleMenuClick.bind(this)}>В меню</button>
+          <button onClick={this.handleMenuClick.bind(this)}>
+            <FontAwesomeIcon icon={faBars} className="icon"/>
+            В меню
+          </button>
         </li>
       </div >
     );
@@ -74,7 +79,10 @@ export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
         <ul className="list-unstyled components">
           {this.createEntities()}
           <li>
-            <a href={`/addClient?viewType=${ViewTypes.Clients}`}>Добавить клиента</a>
+            <a href={`/addClient?viewType=${ViewTypes.Clients}`}>
+              <FontAwesomeIcon icon={faPlus} className="icon"/>
+              Добавить клиента
+            </a>
           </li>
         </ul>
       </div>

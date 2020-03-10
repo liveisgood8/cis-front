@@ -1,5 +1,9 @@
 .main-header {
+  position: fixed;
+  top: 0;
+  width: 100%;
   height: 80px;
+  z-index: 10;
   background-color: #6d7fcc;
   box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
@@ -11,6 +15,13 @@
   border: none;
   background: none;
   margin-left: 10px;;
+}
+
+.product-label {
+  color: white;
+  align-self: center;
+  margin-left: 15px;
+  margin-bottom: 5px;
 }
 
 @media (max-width: 768px) {

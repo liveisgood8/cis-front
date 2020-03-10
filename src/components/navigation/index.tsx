@@ -17,6 +17,7 @@ const NavigationBar: React.SFC<{}> = () => {
       <button className="menu-button" onClick={reverseSideBarVisible}>
         <FontAwesomeIcon icon={ faBars } color="white" />
       </button>
+      <h4 className="product-label">QCRM</h4>
     </Navbar>
   );
 };

@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouterState, push } from 'connected-react-router';
-import { store } from '../../index'
+import { store } from '../../index';
 import { getTasksAsync, getContractsAsync } from '../../stores/business-entities/actions';
 import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { ViewTypes } from '.';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface IReduxProps {
   contracts: IContract[];
@@ -75,10 +77,16 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
       <div>
         <p>Договора</p>
         <li>
-          <button onClick={this.handleMenuClick.bind(this)}>В меню</button>
+          <button onClick={this.handleMenuClick.bind(this)}>
+            <FontAwesomeIcon icon={faBars} className="icon"/>
+            В меню
+          </button>
         </li>
         <li>
-          <button onClick={this.handleBackClick.bind(this)}>Клиенты</button>
+          <button onClick={this.handleBackClick.bind(this)}>
+            <FontAwesomeIcon icon={faArrowLeft} className="icon"/>
+            Клиенты
+          </button>
         </li>
       </div>
     );
@@ -102,7 +110,10 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
         <ul className="list-unstyled components">
           {this.createEntities()}
           <li>
-            <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>Добавить договор</a>
+            <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
+              <FontAwesomeIcon icon={faPlus} className="icon"/>
+              Добавить договор
+            </a>
           </li>
         </ul>
       </div>

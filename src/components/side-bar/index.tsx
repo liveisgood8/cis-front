@@ -57,10 +57,6 @@ export class SideBar extends React.Component<PropsFromRedux, {}> {
   render(): JSX.Element {
     return (
       <nav id="sidebar" className={this.props.isVisible ? 'active' : ''}>
-        <div className="sidebar-header">
-          <h4>Система QCRM</h4>
-        </div>
-
         {this.getCurrentChild()}
       </nav>
     );

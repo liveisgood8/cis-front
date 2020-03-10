@@ -3,21 +3,19 @@
 ----------------------------------------------------- */
 
 #sidebar {
+  position: fixed;
+  top: 80px;
   min-width: 250px;
   max-width: 250px;
+  height: 100%;
   background: #7386D5;
   color: #fff;
   transition: all 0.3s;
+  z-index: 5;
 }
 
 #sidebar.active {
   margin-left: -250px;
-}
-
-#sidebar .sidebar-header {
-  height: 80px;
-  padding: 20px;
-  background: #6d7fcc;
 }
 
 #sidebar ul.components {
@@ -27,6 +25,12 @@
 
 #sidebar ul {
   margin-bottom: 0;
+}
+
+#sidebar ul li .icon {
+  height: 20px;
+  width: 20px;
+  margin-right: 10px;
 }
 
 #sidebar ul p {
@@ -148,14 +152,15 @@ margin: 40px 0;
 
 @media (max-width: 768px) {
   #sidebar {
-      min-width: 230px;
-      max-width: 230px;
-      margin-left: -230px;
+    position: fixed;
+    min-width: 230px;
+    max-width: 230px;
+    margin-left: -230px;
   }
   #sidebar.active {
-      margin-left: 0;
+    margin-left: 0;
   }
   #sidebarCollapse span {
-      display: none;
+    display: none;
   }
 }

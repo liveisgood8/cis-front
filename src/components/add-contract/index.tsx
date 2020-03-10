@@ -2,7 +2,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './styles.css';
 
 import * as React from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, FormGroup } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { connect, ConnectedProps } from 'react-redux';
 import ru from 'date-fns/locale/ru';
@@ -12,6 +12,7 @@ import { addToastAction } from '../../stores/toast/actions';
 import { getClientsAsync, addContractAction } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IClient } from '../../stores/business-entities/types';
+import { handleAxiosError } from '../../stores/axios/actions';
 
 interface IReduxProps {
   clients: IClient[];
@@ -39,6 +40,7 @@ interface IState {
   client?: IClient;
   name?: string;
   conclusionDate?: Date;
+  scanFile?: File | null;
   comment?: string;
 
   isLoading: boolean;
@@ -68,11 +70,19 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
     e.preventDefault();
     e.stopPropagation();
     try {
+      const formData = new FormData();
+      formData.append('contractCopyFile', this.state.scanFile as File);
+      const uploadResult = await AxiosService.post('/contracts/uploadCopyFile', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       const result = await AxiosService.post('/contracts', {
         clientId: this.state.client?.id,
         name: this.state.name,
         conclusionDate: this.state.conclusionDate,
         comment: this.state.comment,
+        copyPath: uploadResult.data.contentPath,
       });
       store.dispatch(addContractAction({
         id: result.data,
@@ -86,11 +96,7 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
         type: 'info',
       }));
     } catch (err) {
-      store.dispatch(addToastAction({
-        title: 'Не удалось добавить договор',
-        message: err.response?.data.message || err.message,
-        type: 'danger',
-      }));
+      store.dispatch<any>(handleAxiosError(err));
     }
   }
 
@@ -121,6 +127,12 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
     this.setState({
       comment: e.currentTarget.value,
     });
+  }
+
+  private handleScanFileChange(e: React.FormEvent<HTMLInputElement>): void {
+    this.setState({
+      scanFile: e.currentTarget.files?.item(0),
+    })
   }
 
   public render(): JSX.Element {
@@ -162,6 +174,18 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
             onChange={this.handleCommentChange.bind(this)}
           />
         </Form.Group>
+
+        <FormGroup className="custom-file mb-3">
+          <Form.Control
+            type="file"
+            className="custom-file-input"
+            style={{ cursor: 'pointer' }}
+            onChange={this.handleScanFileChange.bind(this)}
+          />
+          <Form.Label className="custom-file-label" data-browse="Выбрать файл">
+            {this.state.scanFile ? this.state.scanFile.name : 'Выберите копию договора'}
+          </Form.Label>
+        </FormGroup>
 
         <Button variant="primary" type="submit">
           Добавить договор

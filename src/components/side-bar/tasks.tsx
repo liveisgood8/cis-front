@@ -7,6 +7,8 @@ import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { store } from '../..';
 import { ViewTypes } from '.';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 interface IReduxProps {
   tasks: ITask[];
@@ -76,10 +78,16 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
       <div>
         <p>Задачи</p>
         <li>
-          <button onClick={this.handleMenuClick.bind(this)}>В меню</button>
+          <button onClick={this.handleMenuClick.bind(this)}>
+            <FontAwesomeIcon icon={faBars} className="icon" />
+            В меню
+          </button>
         </li>
         <li>
-          <button onClick={this.handleBackClick.bind(this)}>Договора</button>
+          <button onClick={this.handleBackClick.bind(this)}>
+            <FontAwesomeIcon icon={faArrowLeft} className="icon" />
+            Договора
+          </button>
         </li>
       </div>
     );
@@ -102,6 +110,7 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
           {this.createEntities()}
           <li>
             <a href={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+              <FontAwesomeIcon icon={faPlus} className="icon" />
               Добавить задачу
             </a>
           </li>

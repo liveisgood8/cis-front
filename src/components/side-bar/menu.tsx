@@ -5,6 +5,8 @@ import { store } from '../..';
 import { push } from 'connected-react-router';
 import { IApplicationState } from '../../stores/config-reducers';
 import { ViewTypes } from '.';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserFriends, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 
 interface IElement {
   name: string;
@@ -71,10 +73,16 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
       <ul className="list-unstyled components">
         <p>Основное меню</p>
         <li className={undefined /* 'active' */}>
-          <button onClick={this.handleClientsClick.bind(this)}>Клиенты</button>
+          <button onClick={this.handleClientsClick.bind(this)}>
+            <FontAwesomeIcon icon={faUserFriends} className="icon"/>
+            Клиенты
+          </button>
         </li>
         <li className={undefined /* 'active' */}>
-          <button onClick={this.handleRequestsClick.bind(this)}>Обращения</button>
+          <button onClick={this.handleRequestsClick.bind(this)}>
+            <FontAwesomeIcon icon={faEnvelopeOpenText} className="icon"/>
+            Обращения
+          </button>
         </li>
       </ul>
     );
