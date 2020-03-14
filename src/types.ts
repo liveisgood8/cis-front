@@ -1,8 +1,9 @@
-import { ThunkAction } from 'redux-thunk';
-import { Action } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { Action, AnyAction } from 'redux';
 import { IApplicationState } from './stores/config-reducers';
 
-export type AppThunkAction<ReturnType = void> = ThunkAction<ReturnType, IApplicationState, unknown, Action<string>>;
+export type AppThunkAction<ReturnType = void> = ThunkAction<ReturnType, IApplicationState, unknown, AnyAction>;
+export type AppThunkDispatch = ThunkDispatch<IApplicationState, null, AnyAction>
 
 export enum Errors {
   UNKNOWN_ERROR = 1,

@@ -9,6 +9,8 @@ import { IBusinessEntities } from './business-entities/types';
 import { businessEntitiesReducer } from './business-entities/reducer';
 import { sideBarReduces } from './sidebar/reducer';
 import { ISideBarState } from './sidebar/types';
+import { permissionsReducer } from './permissions/reducer';
+import { IPermissionsState } from './permissions/types';
 
 export interface IApplicationState {
   router: RouterState;
@@ -16,6 +18,7 @@ export interface IApplicationState {
   businessEntities: IBusinessEntities;
   sideBar: ISideBarState;
   toasts: IToastState;
+  permissions: IPermissionsState;
 }
 
 const createRootReducer = (history: History) =>
@@ -25,5 +28,6 @@ const createRootReducer = (history: History) =>
     businessEntities: businessEntitiesReducer,
     sideBar: sideBarReduces,
     toasts: toastsReducer,
+    permissions: permissionsReducer,
   });
 export default createRootReducer;

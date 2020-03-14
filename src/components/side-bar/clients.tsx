@@ -7,17 +7,21 @@ import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { store } from '../..';
 import { ViewTypes } from './';
-import { faBars, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
+import { UserPermissions } from '../../stores/permissions/types';
 
 interface IReduxProps {
   clients: IClient[];
   routerPath: string;
+  isHasAddPermission: boolean;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   clients: state.businessEntities.clients,
   routerPath: state.router.location.pathname,
+  isHasAddPermission: isHasPermissionSelectorFactory(UserPermissions.ADD_CLIENTS)(state),
 });
 
 const mapDispatch = {
@@ -31,61 +35,38 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class SideBarClients extends BaseEntitiesList<PropsFromRedux> {
+export class SideBarClients extends React.Component<PropsFromRedux> {
   private handleClientClick(client: IClient): void {
     store.dispatch(push(
       `${this.props.routerPath}?viewType=${ViewTypes.Contracts}&clientId=${client.id}`));
   }
 
-  private handleMenuClick(): void {
-    store.dispatch(push('/'));
-  }
-
-  private createEntities(): JSX.Element[] {
-    return this.props.clients.map((e, i) => {
-      return (
-        <li key={i}>
-          <button onClick={this.handleClientClick.bind(this, e)}>{e.name}</button>
-        </li>
-      );
-    });
-  }
-
-  private createControlMenu(): JSX.Element {
+  private addClientComponentCreator(): JSX.Element | undefined {
+    if (!this.props.isHasAddPermission) {
+      return;
+    }
     return (
-      <div>
-        <p>Клиенты</p>
-        <li>
-          <button onClick={this.handleMenuClick.bind(this)}>
-            <FontAwesomeIcon icon={faBars} className="icon"/>
-            В меню
-          </button>
-        </li>
-      </div >
+      <li>
+        <a href={`/addClient?viewType=${ViewTypes.Clients}`}>
+          <FontAwesomeIcon icon={faPlus} className="icon" />
+          Добавить клиента
+        </a>
+      </li>
     );
   }
 
   componentDidMount(): void {
     this.props.getClientsAsync();
-    super.componentDidMount();
   }
 
   render(): JSX.Element {
     return (
-      <div className={`side-bar-child ${this.state.mounted ? 'active' : ''}`}>
-        <ul className="list-unstyled components">
-          {this.createControlMenu()}
-        </ul>
-        <ul className="list-unstyled components">
-          {this.createEntities()}
-          <li>
-            <a href={`/addClient?viewType=${ViewTypes.Clients}`}>
-              <FontAwesomeIcon icon={faPlus} className="icon"/>
-              Добавить клиента
-            </a>
-          </li>
-        </ul>
-      </div>
+      <BaseEntitiesList<IClient>
+        entities={this.props.clients}
+        listName="Клиенты"
+        entityClickHandler={this.handleClientClick.bind(this)}
+        addEntityComponent={this.addClientComponentCreator()}
+      />
     );
   }
 }

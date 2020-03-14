@@ -1,22 +1,95 @@
 import * as React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { IBaseBusinessEntity } from '../../stores/business-entities/types';
+import { store } from '../..';
+import { push } from 'connected-react-router';
 
 interface IState {
   mounted: boolean;
 }
 
-export class BaseEntitiesList<P> extends React.Component<P, IState > {
-  constructor(props: P) {
+interface IProps<EntityType extends IBaseBusinessEntity> {
+  listName: string;
+  entities: EntityType[];
+  entityClickHandler: (entity: EntityType) => void;
+  addEntityComponent: JSX.Element | undefined;
+  previousListName?: string;
+  moveToPreviousList?: () => void;
+}
+
+export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
+  extends React.Component<IProps<EntityType>, IState> {
+  constructor(props: IProps<EntityType>) {
     super(props);
     this.state = {
       mounted: false,
     };
   }
 
-  componentDidMount(): void {
+  private handleEntityClick(entity: EntityType): void {
+    this.props.entityClickHandler(entity);
+  }
+
+  private handleMenuClick(): void {
+    store.dispatch(push('/'));
+  }
+
+  private createEntities(): JSX.Element[] {
+    return this.props.entities.map((e, i) => {
+      return (
+        <li key={i}>
+          <button onClick={(): void => this.props.entityClickHandler(e)}>{e.name}</button>
+        </li>
+      );
+    });
+  }
+
+  private createControlMenu(): JSX.Element {
+    const moveToPreviousElement = this.props.moveToPreviousList && this.props.previousListName ?
+      (
+        <li>
+          <button onClick={this.props.moveToPreviousList}>
+            <FontAwesomeIcon icon={faArrowLeft} className="icon" />
+            {this.props.previousListName}
+          </button>
+        </li>
+      ) : (
+        undefined
+      );
+    return (
+      <div>
+        <p>{this.props.listName}</p>
+        <li>
+          <button onClick={this.handleMenuClick.bind(this)}>
+            <FontAwesomeIcon icon={faBars} className="icon" />
+            В меню
+          </button>
+        </li>
+        {moveToPreviousElement}
+      </div >
+    );
+  }
+
+  public componentDidMount(): void {
     setTimeout(() => {
       this.setState({
         mounted: true,
       });
     }, 0);
+  }
+
+  public render(): JSX.Element {
+    return (
+      <div className={`side-bar-child ${this.state.mounted ? 'active' : ''}`}>
+        <ul className="list-unstyled components">
+          {this.createControlMenu()}
+        </ul>
+        <ul className="list-unstyled components">
+          {this.createEntities()}
+          {this.props.addEntityComponent}
+        </ul>
+      </div>
+    );
   }
 }

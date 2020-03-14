@@ -1,19 +1,16 @@
-import './index.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import configStore, { history } from './stores/config-store';
-import Routes from './routes';
-import AlertPopup from './components/toast/toast';
+import configStore from './stores/config-store';
+import { App } from './app';
 
 export const store = configStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Routes browserHistory={history} />
-    <AlertPopup />
+    <App />
   </Provider>,
   document.getElementById('root'));
 

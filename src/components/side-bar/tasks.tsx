@@ -8,16 +8,20 @@ import { BaseEntitiesList } from './base-entities';
 import { store } from '../..';
 import { ViewTypes } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
+import { UserPermissions } from '../../stores/permissions/types';
 
 interface IReduxProps {
   tasks: ITask[];
   router: RouterState;
+  isHasAddPermission: boolean;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   tasks: state.businessEntities.tasks,
   router: state.router,
+  isHasAddPermission: isHasPermissionSelectorFactory(UserPermissions.ADD_TASKS)(state),
 });
 
 const mapDispatch = {
@@ -31,17 +35,16 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
+export class SideBarTasks extends React.Component<PropsFromRedux> {
   private clientId: number | null = null;
   private contractId: number | null = null;
 
   constructor(props: PropsFromRedux) {
     super(props);
 
-    const clientIdString = new URLSearchParams(this.props.router.location.search)
-      .get('clientId');
-    const contractIdString = new URLSearchParams(this.props.router.location.search)
-      .get('contractId');
+    const urlParams = new URLSearchParams(this.props.router.location.search);
+    const clientIdString = urlParams.get('clientId');
+    const contractIdString = urlParams.get('contractId');
     if (clientIdString) {
       this.clientId = parseInt(clientIdString);
     }
@@ -59,37 +62,17 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
       `${this.props.router.location.pathname}?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`));
   }
 
-  private handleMenuClick(): void {
-    store.dispatch(push('/'));
-  }
-
-  private createEntities(): JSX.Element[] {
-    return this.props.tasks.map((e, i) => {
-      return (
-        <li key={i}>
-          <button onClick={this.handleTaskClick.bind(this, e)}>{e.name}</button>
-        </li>
-      );
-    });
-  }
-
-  private createControlMenu(): JSX.Element {
+  private addTaskComponentCreator(): JSX.Element | undefined {
+    if (!this.props.isHasAddPermission) {
+      return;
+    }
     return (
-      <div>
-        <p>Задачи</p>
-        <li>
-          <button onClick={this.handleMenuClick.bind(this)}>
-            <FontAwesomeIcon icon={faBars} className="icon" />
-            В меню
-          </button>
-        </li>
-        <li>
-          <button onClick={this.handleBackClick.bind(this)}>
-            <FontAwesomeIcon icon={faArrowLeft} className="icon" />
-            Договора
-          </button>
-        </li>
-      </div>
+      <li>
+        <a href={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+          <FontAwesomeIcon icon={faPlus} className="icon" />
+          Добавить задачу
+        </a>
+      </li>
     );
   }
 
@@ -97,25 +80,18 @@ export class SideBarTasks extends BaseEntitiesList<PropsFromRedux> {
     if (this.contractId) {
       this.props.getTasksAsync(this.contractId);
     }
-    super.componentDidMount();
   }
 
   render(): JSX.Element {
     return (
-      <div className={`side-bar-child ${this.state.mounted ? 'active' : ''}`}>
-        <ul className="list-unstyled components">
-          {this.createControlMenu()}
-        </ul>
-        <ul className="list-unstyled components">
-          {this.createEntities()}
-          <li>
-            <a href={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
-              <FontAwesomeIcon icon={faPlus} className="icon" />
-              Добавить задачу
-            </a>
-          </li>
-        </ul>
-      </div>
+      <BaseEntitiesList<ITask>
+        entities={this.props.tasks}
+        listName="Задачи"
+        entityClickHandler={this.handleTaskClick.bind(this)}
+        addEntityComponent={this.addTaskComponentCreator()}
+        previousListName="Договора"
+        moveToPreviousList={this.handleBackClick.bind(this)}
+      />
     );
   }
 }

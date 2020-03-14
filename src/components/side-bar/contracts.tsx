@@ -8,17 +8,21 @@ import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
 import { ViewTypes } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
+import { UserPermissions } from '../../stores/permissions/types';
 
 interface IReduxProps {
   contracts: IContract[];
   router: RouterState;
+  isHasAddPermission: boolean;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => {
   return {
     contracts: state.businessEntities.contracts,
     router: state.router,
+    isHasAddPermission: isHasPermissionSelectorFactory(UserPermissions.ADD_CONTRACTS)(state),
   };
 };
 
@@ -34,7 +38,7 @@ const connector = connect(
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
+export class SideBarContracts extends React.Component<PropsFromRedux> {
   private clientId: number | null = null;
 
   constructor(props: PropsFromRedux) {
@@ -55,68 +59,40 @@ export class SideBarContracts extends BaseEntitiesList<PropsFromRedux> {
 
   private handleBackClick(): void {
     store.dispatch(push(
-      `${this.props.router.location.pathname}?viewType=${ViewTypes.Clients}`));
+      `${this.props.router.location.pathname}?viewType=${ViewTypes.Clients}`,
+    ));
   }
 
-  private handleMenuClick(): void {
-    store.dispatch(push('/'));
-  }
-
-  private createEntities(): JSX.Element[] {
-    return this.props.contracts.map((e, i) => {
-      return (
-        <li key={i}>
-          <button onClick={this.handleContractClick.bind(this, e)}>{e.name}</button>
-        </li>
-      );
-    });
-  }
-
-  private createControlMenu(): JSX.Element {
+  private addContractComponentCreator(): JSX.Element | undefined {
+    if (!this.props.isHasAddPermission) {
+      return;
+    }
     return (
-      <div>
-        <p>Договора</p>
-        <li>
-          <button onClick={this.handleMenuClick.bind(this)}>
-            <FontAwesomeIcon icon={faBars} className="icon"/>
-            В меню
-          </button>
-        </li>
-        <li>
-          <button onClick={this.handleBackClick.bind(this)}>
-            <FontAwesomeIcon icon={faArrowLeft} className="icon"/>
-            Клиенты
-          </button>
-        </li>
-      </div>
+      <li>
+        <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
+          <FontAwesomeIcon icon={faPlus} className="icon" />
+          Добавить договор
+        </a>
+      </li>
     );
   }
 
   componentDidMount(): void {
     if (this.clientId) {
-      this.props.getContractsAsync(this.clientId)
-        .then(() => {
-          super.componentDidMount();
-        });
+      this.props.getContractsAsync(this.clientId);
     }
   }
 
   render(): JSX.Element {
     return (
-      <div className={`side-bar-child ${this.state.mounted ? 'active' : ''}`}>
-        <ul className="list-unstyled components">
-          {this.createControlMenu()}
-        </ul>
-        <ul className="list-unstyled components">
-          {this.createEntities()}
-          <li>
-            <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
-              <FontAwesomeIcon icon={faPlus} className="icon"/>
-              Добавить договор
-            </a>
-          </li>
-        </ul>
-      </div>
+      <BaseEntitiesList<IContract>
+        entities={this.props.contracts}
+        listName="Договора"
+        entityClickHandler={this.handleContractClick.bind(this)}
+        addEntityComponent={this.addContractComponentCreator()}
+        previousListName="Клиенты"
+        moveToPreviousList={this.handleBackClick.bind(this)}
+      />
     );
   }
 }
