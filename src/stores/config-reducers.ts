@@ -11,6 +11,8 @@ import { sideBarReduces } from './sidebar/reducer';
 import { ISideBarState } from './sidebar/types';
 import { permissionsReducer } from './permissions/reducer';
 import { IPermissionsState } from './permissions/types';
+import { IBusinessRequestsState } from './business-requests/types';
+import { businessRequestsReducer } from './business-requests/reducer';
 
 export interface IApplicationState {
   router: RouterState;
@@ -19,15 +21,17 @@ export interface IApplicationState {
   sideBar: ISideBarState;
   toasts: IToastState;
   permissions: IPermissionsState;
+  businessRequests: IBusinessRequestsState;
 }
 
 const createRootReducer = (history: History) =>
-  combineReducers({
+  combineReducers<IApplicationState>({
     router: connectRouter(history),
     auth: authenticateReducer,
     businessEntities: businessEntitiesReducer,
     sideBar: sideBarReduces,
     toasts: toastsReducer,
     permissions: permissionsReducer,
+    businessRequests: businessRequestsReducer,
   });
 export default createRootReducer;

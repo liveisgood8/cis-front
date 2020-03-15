@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
+import { Link } from 'react-router-dom';
 
 interface IReduxProps {
   contracts: IContract[];
@@ -69,10 +70,10 @@ export class SideBarContracts extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <a href={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
+        <Link to={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить договор
-        </a>
+        </Link>
       </li>
     );
   }

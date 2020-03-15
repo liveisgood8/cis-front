@@ -11,6 +11,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
+import { Link } from 'react-router-dom';
 
 interface IReduxProps {
   clients: IClient[];
@@ -47,10 +48,10 @@ export class SideBarClients extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <a href={`/addClient?viewType=${ViewTypes.Clients}`}>
+        <Link to={`/addClient?viewType=${ViewTypes.Clients}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить клиента
-        </a>
+        </Link>
       </li>
     );
   }

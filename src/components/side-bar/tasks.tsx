@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
+import { Link } from 'react-router-dom';
 
 interface IReduxProps {
   tasks: ITask[];
@@ -68,10 +69,10 @@ export class SideBarTasks extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <a href={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+        <Link to={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить задачу
-        </a>
+        </Link>
       </li>
     );
   }

@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { IBaseBusinessEntity } from '../../stores/business-entities/types';
 import { store } from '../..';
-import { push } from 'connected-react-router';
+import { push, getLocation } from 'connected-react-router';
+import { ViewTypes } from '.';
 
 interface IState {
   mounted: boolean;
@@ -27,12 +28,9 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
     };
   }
 
-  private handleEntityClick(entity: EntityType): void {
-    this.props.entityClickHandler(entity);
-  }
-
   private handleMenuClick(): void {
-    store.dispatch(push('/'));
+    const location = getLocation(store.getState());
+    store.dispatch(push(`${location.pathname}?viewType=${ViewTypes.Menu}`));
   }
 
   private createEntities(): JSX.Element[] {

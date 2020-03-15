@@ -1,12 +1,13 @@
 import * as React from 'react';
+import { Location } from 'history';
 import { getClientsAsync, getContractsAsync, getTasksAsync } from '../../stores/business-entities/actions';
 import { connect, ConnectedProps } from 'react-redux';
-import { store } from '../..';
-import { push } from 'connected-react-router';
 import { IApplicationState } from '../../stores/config-reducers';
 import { ViewTypes } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserFriends, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
+import { Badge } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 interface IElement {
   name: string;
@@ -18,11 +19,13 @@ interface ISideBarMenuState {
 }
 
 interface IReduxProps {
-  routerPath: string;
+  routerLocation: Location;
+  pendingBusinessRequestsNumber: number;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  routerPath: state.router.location.pathname,
+  routerLocation: state.router.location,
+  pendingBusinessRequestsNumber: state.businessRequests.pendingNumber,
 });
 
 const mapDispatch = {
@@ -39,50 +42,22 @@ const connector = connect(
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuState> {
-  constructor(props: PropsFromRedux) {
-    super(props);
-    this.state = {
-      elements: this.createElements(),
-    };
-  }
-
-  private createElements(): IElement[] {
-    return [
-      {
-        name: 'Клиенты',
-        url: '#',
-      },
-      {
-        name: 'Обращения',
-        url: '#',
-      },
-    ];
-  }
-
-  private handleClientsClick(): void {
-    store.dispatch(push(
-      `${this.props.routerPath}?viewType=${ViewTypes.Clients}`));
-  }
-
-  private handleRequestsClick(): void {
-    console.log('request click');
-  }
-
   render(): JSX.Element {
     return (
       <ul className="list-unstyled components">
         <p>Основное меню</p>
         <li className={undefined /* 'active' */}>
-          <button onClick={this.handleClientsClick.bind(this)}>
-            <FontAwesomeIcon icon={faUserFriends} className="icon"/>
+          <Link to={`${this.props.routerLocation.pathname}?viewType=${ViewTypes.Clients}`}>
+            <FontAwesomeIcon icon={faUserFriends} className="icon" />
             Клиенты
-          </button>
+          </Link>
         </li>
         <li className={undefined /* 'active' */}>
-          <button onClick={this.handleRequestsClick.bind(this)}>
-            <FontAwesomeIcon icon={faEnvelopeOpenText} className="icon"/>
+          <Link to={`/requests${this.props.routerLocation.search}`}>
+            <FontAwesomeIcon icon={faEnvelopeOpenText} className="icon" />
             Обращения
-          </button>
+            <Badge variant="light" className="ml-2">{this.props.pendingBusinessRequestsNumber}</Badge>
+          </Link>
         </li>
       </ul>
     );
