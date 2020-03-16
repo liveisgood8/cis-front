@@ -9,9 +9,9 @@ export interface IAuthData {
 }
 
 export interface IAuthenticateState {
-  readonly loggingIn: boolean;
-  readonly authData?: IAuthData;
-  readonly error?: string;
+  loggingIn: boolean;
+  authData?: IAuthData;
+  isRegistering: boolean;
 }
 
 

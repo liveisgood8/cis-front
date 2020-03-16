@@ -52,6 +52,7 @@
                 "code": 120
             }
         ],
+        "react/prop-types": "off",
         "@typescript-eslint/interface-name-prefix": [
             "error",
             "always"

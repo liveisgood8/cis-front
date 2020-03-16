@@ -11,6 +11,7 @@ import AddClientComponent from '../components/add-client';
 import AddContractComponent from '../components/add-contract';
 import AddTaskComponent from '../components/add-task';
 import RequestListComponent from '../components/request-list';
+import RegisterPage from '../pages/register-page';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -20,6 +21,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
   <ConnectedRouter history={props.browserHistory}>
     <Switch>
       <Route path="/login" component={LoginPage} />
+      <Route path="/registration" component={RegisterPage} />
       <PrivateLayoutRoute exact path="/" component={HomePage} />
       <PrivateLayoutRoute exact path="/addClient" component={AddClientComponent} />
       <PrivateLayoutRoute exact path="/addContract" component={AddContractComponent} />

@@ -1,15 +1,18 @@
-import { login } from '../../services/auth.service';
+import { login, register } from '../../services/auth.service';
 import { createAction } from '@reduxjs/toolkit';
 import { IAuthData } from './types';
 import { push } from 'connected-react-router';
-import { addToastAction } from '../toast/actions';
 import { AxiosError } from 'axios';
 import { AppThunkAction } from '../../types';
 import { handleAxiosError } from '../axios/actions';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IAuthData, '@@auth/loginSuccess'>('@@auth/loginSuccess');
-export const loginFailedAction = createAction<string, '@@auth/loginFailed'>('@@auth/loginFailed');
+export const loginFailedAction = createAction<void, '@@auth/loginFailed'>('@@auth/loginFailed');
+
+export const registerRequestAction = createAction<void>('@@auth/registerRequest');
+export const registerSuccessAction = createAction<void>('@@auth/registerSuccess');
+export const registerFailedAction = createAction<void>('@@auth/registerFailed');
 
 
 export const loginAsync = (
@@ -17,16 +20,6 @@ export const loginAsync = (
   password: string,
 ): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
   dispatch(loginRequestAction());
-  if (!username || !login) {
-    const errorMessage = 'Поля с логином и паролем должны быть заполнены';
-    dispatch(addToastAction({
-      type: 'danger',
-      title: 'Ошибка входа',
-      message: errorMessage,
-    }));
-    dispatch(loginFailedAction(errorMessage));
-    return;
-  }
 
   return login(username, password)
     .then((authData) => {
@@ -34,7 +27,32 @@ export const loginAsync = (
       dispatch(push('/'));
     })
     .catch((err: AxiosError) => {
-      dispatch(loginFailedAction(err.response?.data?.error));
+      dispatch(loginFailedAction());
       dispatch(handleAxiosError(err, 'Неизвестная ошибка при аутентификации'));
     });
+};
+
+export const registerAsync = (
+  login: string,
+  password: string,
+  name: string,
+  surname: string,
+  imageId: number,
+): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
+  dispatch(registerRequestAction());
+
+  try {
+    await register(
+      login,
+      password,
+      name,
+      surname,
+      imageId,
+    );
+    dispatch(registerSuccessAction());
+    dispatch(push('/login'));
+  } catch (err) {
+    dispatch(registerFailedAction());
+    dispatch(handleAxiosError(err, 'Неизвестная ошибка при регистрации'));
+  }
 };

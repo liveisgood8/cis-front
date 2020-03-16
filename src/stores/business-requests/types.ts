@@ -1,5 +1,6 @@
 export interface IBusinessRequest {
   id: number;
+  title: string;
   message: string;
 }
 

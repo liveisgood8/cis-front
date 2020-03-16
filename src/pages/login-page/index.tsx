@@ -6,7 +6,6 @@ import { loginAsync } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IUser } from '../../stores/auth/types';
 import { Link } from 'react-router-dom';
-import { AppThunkAction } from '../../types';
 
 interface IStateProps {
   loggingIn: boolean;
@@ -24,11 +23,7 @@ const mapState = (state: IApplicationState): IStateProps => ({
 
 
 const mapDispatch = {
-  login: (
-    username: string,
-    password: string,
-  ): AppThunkAction<Promise<void>> =>
-    loginAsync(username, password),
+  loginAsync,
 };
 
 const connector = connect(
@@ -48,7 +43,7 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
   }
 
   private onLogin(): void {
-    this.props.login(this.state.login, this.state.password);
+    this.props.loginAsync(this.state.login, this.state.password);
   }
 
   shouldComponentUpdate(nextProps: PropsFromRedux, nextState: ILoginPageState): boolean {
@@ -83,12 +78,15 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
             <p className="mb-3 mt-2 align-self-center font-weight-bold">Вход в систему</p>
             <InputGroup className="mb-3">
               <FormControl
+                required
                 placeholder="Логин"
                 onChange={this.handleLoginChange.bind(this)}
               />
             </InputGroup>
             <InputGroup className="mb-3">
               <FormControl
+                required
+                type="password"
                 placeholder="Пароль"
                 onChange={this.handlePasswordChange.bind(this)}
               />
