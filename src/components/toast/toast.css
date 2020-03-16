@@ -10,24 +10,24 @@
 
 @media (min-width: 576px) { 
   .toast-container {
-    width: 70%;
+    max-width: 70%;
   }
 }
 
 @media (min-width: 768px) { 
   .toast-container {
-    width: 50%;
+    max-width: 50%;
   }
 }
 
 @media (min-width: 992px) { 
   .toast-container {
-    width: 25%;
+    max-width: 25%;
   }
 }
 
 @media (min-width: 1200px) { 
   .toast-container {
-    width: 25%;
+    max-width: 25%;
   }
 }
