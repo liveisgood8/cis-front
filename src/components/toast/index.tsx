@@ -1,10 +1,9 @@
-import './toast.css';
 import * as React from 'react';
-import { Alert, Fade } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import { IToastDefinition } from '../../stores/toast/types';
 import { IApplicationState } from '../../stores/config-reducers';
-import { addToastAction, clearToastAction } from '../../stores/toast/actions';
+import { addToastAction, removeToastAction } from '../../stores/toast/actions';
+import { AlertPopup } from './toast-component/toast';
 
 interface IStateProps {
   toasts: IToastDefinition[];
@@ -16,7 +15,7 @@ const mapState = (state: IApplicationState): IStateProps => ({
 
 const mapDispatch = {
   addToast: addToastAction,
-  clearToasts: clearToastAction,
+  removeToast: removeToastAction,
 };
 
 const connector = connect(
@@ -28,26 +27,14 @@ export type PropsFromRedux = ConnectedProps<typeof connector>
 
 /* eslint-disable react/prop-types */
 
-const AlertPopup: React.SFC<PropsFromRedux> = (props) => {
-  React.useEffect(() => {
-    if (props.toasts.length) {
-      const timer = setTimeout(() => {
-        props.clearToasts();
-      }, 3000);
-      return (): void => clearTimeout(timer);
-    }
-  });
-
+const ToastContainer: React.FC<PropsFromRedux> = (props) => {
   return (
     <div className="toast-container toast-container-position">
       {props.toasts.map((e, i) => {
         return (
-          <Fade in={true} key={i}>
-            <Alert variant={e.type}>
-              <Alert.Heading>{e.title}</Alert.Heading>
-              <p>{e.message}</p>
-            </Alert>
-          </Fade>
+          <AlertPopup key={i} toast={e} onClose={(): void => {
+            props.removeToast(e);
+          }}/>
         );
       })}
     </div>
@@ -56,4 +43,4 @@ const AlertPopup: React.SFC<PropsFromRedux> = (props) => {
 
 /* eslint-enable react/prop-types */
 
-export default connector(AlertPopup);
+export default connector(ToastContainer);

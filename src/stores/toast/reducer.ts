@@ -1,6 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit';
 import { IToastState } from './types';
-import { addToastAction, clearToastAction } from './actions';
+import { addToastAction, removeToastAction } from './actions';
 
 const initialState: IToastState = {
   toasts: [],
@@ -9,8 +9,9 @@ const initialState: IToastState = {
 export const toastsReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(addToastAction, (state, action) => ({ ...state, toasts: state.toasts.concat(action.payload) }))
-    .addCase(clearToastAction, (state) => ({
+    .addCase(removeToastAction, (state, action) => ({
       ...state,
-      toasts: [],
+      toasts: state.toasts.filter((e) => e.title !== action.payload.title &&
+        e.message !== action.payload.message),
     }));
 });
