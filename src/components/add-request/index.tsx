@@ -7,10 +7,10 @@ import { IClient, IContract } from '../../stores/business-entities/types';
 import { fetchClients, fetchContracts } from '../../services/business-entities.service';
 import { fetchUsers } from '../../services/user.service';
 import { addRequest } from '../../services/business-requests.service';
-import { addRequest as addRequestAction, fetchPendingNumber, increasePendingNumber } from '../../stores/business-requests/actions';
+import { addRequest as addRequestAction, increasePendingNumber } from '../../stores/business-requests/actions';
 import { getAuthenticateData } from '../../services/auth.service';
 
-export const AddRequestComponent: React.FC<{}> = (props) => {
+export const AddRequestComponent: React.FC<{}> = () => {
   const [users, setUsers] = React.useState<IUser[]>([]);
   const [clients, setClients] = React.useState<IClient[]>([]);
   const [contracts, setContracts] = React.useState<IContract[]>([]);
