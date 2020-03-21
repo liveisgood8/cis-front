@@ -4,8 +4,10 @@ import { getPendingNumber, getAll } from '../../services/business-requests.servi
 import { handleAxiosError } from '../axios/actions';
 import { IBusinessRequest } from './types';
 
+export const addRequest = createAction<IBusinessRequest>('@@business-requests/addRequest');
 export const setRequests = createAction<IBusinessRequest[]>('@@business-requests/setRequests');
 export const setPendingNumber = createAction<number>('@@business-requests/setPendingNumber');
+export const increasePendingNumber = createAction<void>('@@business-requests/increasePendingNumber');
 export const decreasePendingNumber = createAction<void>('@@business-requests/decreasePendingNumber');
 
 export const fetchPendingNumber = (): AppThunkAction<Promise<void>> => async (dispatch) => {

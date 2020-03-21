@@ -4,6 +4,7 @@ export interface IBaseBusinessEntity {
 }
 
 export interface IClient extends IBaseBusinessEntity {
+  email: string;
   comment?: string;
 }
 

@@ -1,0 +1,8 @@
+.request-header {
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.request-header:hover {
+  background-color: lightgray;
+}

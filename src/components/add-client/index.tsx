@@ -26,6 +26,7 @@ class AddClientComponent extends React.Component<{}, IState> {
         id: response.data,
         name: this.state.name,
         comment: this.state.comment,
+        email: '',
       }));
       store.dispatch(addToastAction({
         message: 'Клиент успешно добавлен',

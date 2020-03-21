@@ -12,6 +12,8 @@ import AddContractComponent from '../components/add-contract';
 import AddTaskComponent from '../components/add-task';
 import RequestListComponent from '../components/request-list';
 import RegisterPage from '../pages/register-page';
+import { HandleRequestComponent } from '../components/handle-request';
+import { AddRequestComponent } from '../components/add-request';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -26,7 +28,9 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/addClient" component={AddClientComponent} />
       <PrivateLayoutRoute exact path="/addContract" component={AddContractComponent} />
       <PrivateLayoutRoute exact path="/addTask" component={AddTaskComponent} />
+      <PrivateLayoutRoute exact path="/addRequest" component={AddRequestComponent} />
       <PrivateLayoutRoute exact path="/requests" component={RequestListComponent} />
+      <PrivateLayoutRoute exact path="/handleRequest/:id" component={HandleRequestComponent} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>
