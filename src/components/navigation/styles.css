@@ -29,3 +29,12 @@
     display: block;
   }
 }
+
+#overlay-example span {
+  margin: 0;
+  cursor: pointer;
+}
+
+#overlay-example span:hover {
+  text-decoration: underline;
+}

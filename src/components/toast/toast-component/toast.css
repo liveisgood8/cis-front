@@ -4,13 +4,15 @@
   right: 10px
 }
 
-.toast-container {
-  width: 95%;
+@media (max-width: 576px) { 
+  .toast-container {
+    max-width: 95%;
+  }
 }
 
 @media (min-width: 576px) { 
   .toast-container {
-    max-width: 70%;
+    max-width: 95%;
   }
 }
 

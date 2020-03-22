@@ -27,12 +27,24 @@ export const AlertPopup: React.FC<IProps> = (props) => {
     });
   }, []);
 
+  const prepareMessage = (): JSX.Element => {
+    return (
+      <p>
+        {props.toast.message.split('\n').map((e, i) => {
+          return (
+            <span key={i}>{e}<br /></span>
+          );
+        })}
+      </p>
+    );
+  };
+
   return (
     <Fade in={isVisible} timeout={fadeTimeout} onExited={(): void => props.onClose()}>
       <div>
         <Alert variant={props.toast.type}>
           <Alert.Heading>{props.toast.title}</Alert.Heading>
-          <p>{props.toast.message}</p>
+          <p>{prepareMessage()}</p>
         </Alert>
       </div>
     </Fade>
