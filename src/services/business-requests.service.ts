@@ -8,6 +8,11 @@ interface ICreateRequestObject {
   message: string;
 }
 
+interface IRequestAnswer {
+  subject: string;
+  body: string;
+}
+
 export async function addRequest(request: ICreateRequestObject): Promise<IBusinessRequest> {
   const response = await AxiosService.post('/business-requests', request);
   return response.data;
@@ -35,7 +40,7 @@ export async function getById(id: number): Promise<IBusinessRequest> {
 export async function handleBusinessRequest(
   requestId: number,
   clientEmail: string,
-  answer: string,
+  answer: IRequestAnswer,
 ): Promise<void> {
   await AxiosService.patch('/business-requests', {
     requestId,
