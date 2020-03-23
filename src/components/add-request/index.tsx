@@ -24,7 +24,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
   const [message, setMessage] = React.useState<string>('');
   const dispatch = useDispatch();
 
-  const updateContracts = async (client: IClient): Promise<void> => {
+  const updateContracts = React.useCallback(async (client: IClient): Promise<void> => {
     try {
       setContractsLoading(true);
       const contracts = await fetchContracts(client.id);
@@ -36,7 +36,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
     } catch (err) {
       dispatch(handleAxiosError(err, 'Не удалось получить список договоров'));
     }
-  };
+  }, [dispatch]);
 
   React.useEffect(() => {
     (async (): Promise<void> => {
@@ -58,7 +58,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
         dispatch(handleAxiosError(err, 'Не удалось получить список клиентов или пользователей'));
       }
     })();
-  }, []);
+  }, [dispatch, updateContracts]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();

@@ -40,7 +40,7 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    (async () => {
+    (async (): Promise<void> => {
       try {
         const images = await fetchUsersImageList();
         setImageUrlList(images);
@@ -48,7 +48,7 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
         dispatch(handleAxiosError(err, 'Не удалось получить список изображений профиля'));
       }
     })();
-  }, [])
+  }, [dispatch]);
 
   const onRegister = (): void => {
     if (password !== passwordConfirm) {
@@ -68,17 +68,13 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
     );
   };
 
-  const profileImageUrlList = process.env.NODE_ENV === 'development' ?
-    ['http://localhost:8080/profile-images/1.'] :
-    [] 
-
   return (
     <Container className="d-flex min-vh-100 flex-column">
       <Row className="flex-grow-1 flex-column justify-content-center">
         <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
           className="d-flex flex-column p-4 border rounded shadow-sm bg-white mb-4">
           <p className="mb-3 mt-2 align-self-center font-weight-bold">Регистрация в системе</p>
-          <ImagePickerComponent 
+          <ImagePickerComponent
             imageUrlList={imageUrlList}
             onImageChange={(imageUrl): void => setImage(imageUrl)}
           />

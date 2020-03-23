@@ -20,17 +20,19 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
   const [isHandling, setHandling] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
+  const { id } = props.match.params;
+
   React.useEffect(() => {
     (async (): Promise<void> => {
       try {
-        const requests = await getById(+props.match.params.id);
+        const requests = await getById(+id);
         setRequest(requests);
         setEmail(request?.contract?.client?.email);
       } catch (err) {
         dispatch(handleAxiosError(err));
       }
     })();
-  }, []);
+  }, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();

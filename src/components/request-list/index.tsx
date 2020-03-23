@@ -26,9 +26,11 @@ const connector = connect(mapStateToProps, mapDispatch);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
+  const { fetchRequests } = props;
+
   React.useEffect(() => {
-    props.fetchRequests();
-  }, []);
+    fetchRequests();
+  }, [fetchRequests]);
 
   if (props.request.length) {
     return (
