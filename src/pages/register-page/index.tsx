@@ -1,10 +1,13 @@
 import * as React from 'react';
 import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, ConnectedProps, useDispatch } from 'react-redux';
 import { registerAsync } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { addToastAction } from '../../stores/toast/actions';
+import { ImagePickerComponent } from '../../components/image-picker';
+import { fetchUsersImageList } from '../../services/user.service';
+import { handleAxiosError } from '../../stores/axios/actions';
 
 interface IStateProps {
   isRegistering: boolean;
@@ -32,7 +35,20 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
   const [passwordConfirm, setPasswordConfirm] = React.useState<string>('');
   const [name, setName] = React.useState<string>('');
   const [surname, setSurname] = React.useState<string>('');
-  const [imageId, setImageId] = React.useState<number>(0);
+  const [image, setImage] = React.useState<string>('');
+  const [imageUrlList, setImageUrlList] = React.useState<string[]>([]);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    (async () => {
+      try {
+        const images = await fetchUsersImageList();
+        setImageUrlList(images);
+      } catch (err) {
+        dispatch(handleAxiosError(err, 'Не удалось получить список изображений профиля'));
+      }
+    })();
+  }, [])
 
   const onRegister = (): void => {
     if (password !== passwordConfirm) {
@@ -48,9 +64,13 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
       password,
       name,
       surname,
-      imageId,
+      image,
     );
   };
+
+  const profileImageUrlList = process.env.NODE_ENV === 'development' ?
+    ['http://localhost:8080/profile-images/1.'] :
+    [] 
 
   return (
     <Container className="d-flex min-vh-100 flex-column">
@@ -58,6 +78,10 @@ export const RegisterPage: React.FC<PropsFromRedux> = (props) => {
         <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
           className="d-flex flex-column p-4 border rounded shadow-sm bg-white mb-4">
           <p className="mb-3 mt-2 align-self-center font-weight-bold">Регистрация в системе</p>
+          <ImagePickerComponent 
+            imageUrlList={imageUrlList}
+            onImageChange={(imageUrl): void => setImage(imageUrl)}
+          />
           <InputGroup className="mb-3">
             <FormControl
               required

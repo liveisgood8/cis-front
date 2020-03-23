@@ -29,7 +29,7 @@ export async function register(
   password: string,
   name: string,
   surname: string,
-  imageId: number,
+  imageUrl: string,
 ): Promise<void> {
   const hashedPassword = md5(password);
   await AxiosService.post('/auth/register', {
@@ -37,7 +37,7 @@ export async function register(
     password: hashedPassword,
     name,
     surname,
-    imageId,
+    imageUrl,
   });
 }
 

@@ -37,7 +37,7 @@ export const registerAsync = (
   password: string,
   name: string,
   surname: string,
-  imageId: number,
+  imageUrl: string,
 ): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
   dispatch(registerRequestAction());
 
@@ -47,7 +47,7 @@ export const registerAsync = (
       password,
       name,
       surname,
-      imageId,
+      imageUrl,
     );
     dispatch(registerSuccessAction());
     dispatch(push('/login'));

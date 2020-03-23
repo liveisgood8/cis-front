@@ -7,7 +7,7 @@ import { push } from 'connected-react-router';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { reverseVisibleAction } from '../../stores/sidebar/actions';
-import { logout } from '../../services/auth.service';
+import { logout, getAuthenticateData } from '../../services/auth.service';
 
 
 const NavigationBar: React.FC<{}> = () => {
@@ -36,7 +36,7 @@ const NavigationBar: React.FC<{}> = () => {
       <h4 className="product-label flex-grow-1">QCRM</h4>
       <div className="profile-image-container">
         <OverlayTrigger trigger="click" placement="bottom" overlay={userMenu} rootClose>
-          <Image src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Circle-icons-profile.svg/1200px-Circle-icons-profile.svg.png"
+          <Image src={getAuthenticateData()?.user.imageUrl}
             roundedCircle
             height="50px"
             style={{ cursor: 'pointer' }}
