@@ -14,6 +14,7 @@ import RequestListComponent from '../components/request-list';
 import RegisterPage from '../pages/register-page';
 import { HandleRequestComponent } from '../components/handle-request';
 import { AddRequestComponent } from '../components/add-request';
+import { AuthProfileSettingsComponent } from '../components/profile-settings/auth-profile-settings';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -31,6 +32,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/addRequest" component={AddRequestComponent} />
       <PrivateLayoutRoute exact path="/requests" component={RequestListComponent} />
       <PrivateLayoutRoute exact path="/handleRequest/:id" component={HandleRequestComponent} />
+      <PrivateLayoutRoute exact path="/profile" component={AuthProfileSettingsComponent} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>

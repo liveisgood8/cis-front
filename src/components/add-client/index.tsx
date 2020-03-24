@@ -67,7 +67,7 @@ class AddClientComponent extends React.Component<{}, IState> {
 
   public render(): JSX.Element {
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={this.handleSubmit.bind(this)} className="flex-grow-1">
         <Form.Group controlId="formBasicName">
           <Form.Label>Имя клиента</Form.Label>
           <Form.Control placeholder="Введите имя" required onChange={this.handleNameChange.bind(this)} />

@@ -100,7 +100,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form className="flex-grow-1" onSubmit={handleSubmit}>
       <Form.Group controlId="formBasicClient">
         <Form.Label>Связанный клиент</Form.Label>
         <Form.Control as="select"

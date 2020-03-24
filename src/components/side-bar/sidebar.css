@@ -3,11 +3,11 @@
 ----------------------------------------------------- */
 
 #sidebar {
-  position: fixed;
+  position: sticky;
+  height: calc(100vh - 80px);
   top: 80px;
   min-width: 250px;
   max-width: 250px;
-  height: 100%;
   background: #7386D5;
   color: #fff;
   transition: all 0.3s;

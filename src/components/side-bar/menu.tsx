@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserFriends, faEnvelopeOpenText, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
+import { UserPermissions } from '../../stores/permissions/types';
 
 interface IElement {
   name: string;
@@ -21,11 +23,13 @@ interface ISideBarMenuState {
 interface IReduxProps {
   routerLocation: Location;
   pendingBusinessRequestsNumber: number;
+  isHasRegisterRequestPermission: boolean;
 }
 
 const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   routerLocation: state.router.location,
   pendingBusinessRequestsNumber: state.businessRequests.pendingNumber,
+  isHasRegisterRequestPermission: isHasPermissionSelectorFactory(UserPermissions.REGISTER_REQUEST)(state),
 });
 
 const mapDispatch = {
@@ -61,14 +65,18 @@ export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuSta
             </Link>
           </li>
         </ul>
-        <ul className="list-unstyled components">
-          <li>
-            <Link to={`/addRequest${this.props.routerLocation.search}`}>
-              <FontAwesomeIcon icon={faPaperPlane} className="icon" />
-              Регистрация обращения
-            </Link>
-          </li>
-        </ul>
+        {this.props.isHasRegisterRequestPermission ?
+          <ul className="list-unstyled components">
+            <li>
+              <Link to={`/addRequest${this.props.routerLocation.search}`}>
+                <FontAwesomeIcon icon={faPaperPlane} className="icon" />
+                Регистрация обращения
+              </Link>
+            </li>
+          </ul> :
+          undefined
+        }
+
       </div>
     );
   }

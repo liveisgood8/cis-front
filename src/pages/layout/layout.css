@@ -2,9 +2,8 @@
 .wrapper {
   display: flex;
   width: 100%;
+  min-height: calc(100vh - 80px);
   align-items: stretch;
-  padding-top: 80px;
-  padding-left: 250px;
 }
 
 #content {

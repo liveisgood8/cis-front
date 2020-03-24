@@ -56,7 +56,7 @@ export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
     );
   } else {
     return (
-      <div className="d-flex flex-column" style={{ color: '#7386D5' }}>
+      <div className="flex-grow-1 align-self-center d-flex flex-column" style={{ color: '#7386D5' }}>
         <div className="align-self-center m-5">
           <FontAwesomeIcon style={{ height: '100px', width: '100%' }} icon={faCommentSlash} />
           <h4>Список обращений пуст</h4>

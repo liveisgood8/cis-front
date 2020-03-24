@@ -6,17 +6,15 @@ import NavigationBar from '../../components/navigation';
 
 const Layout: React.SFC<React.PropsWithChildren<{}>> = (props) => {
   return (
-    <div>
+    <React.Fragment>
       <NavigationBar />
-      <SideBar />
       <div className="wrapper">
-        <div style={{ width: '100%' }}>
-          <div id="content">
-            {props.children}
-          </div>
-        </div>
+        <SideBar />
+        <main className="flex-grow-1 m-3 d-flex">
+          {props.children}
+        </main>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

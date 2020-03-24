@@ -145,7 +145,7 @@ class AddTaskComponent extends React.Component<PropsFromRedux, IState> {
 
   public render(): JSX.Element {
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <Form className="flex-grow-1" onSubmit={this.handleSubmit.bind(this)}>
         <Form.Group controlId="formBasicClient">
           <Form.Label>Связанный клиент</Form.Label>
           <Form.Control as="select" required onChange={this.handleClientChange.bind(this)}>

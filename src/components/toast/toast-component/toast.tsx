@@ -44,7 +44,7 @@ export const AlertPopup: React.FC<IProps> = (props) => {
       <div>
         <Alert variant={props.toast.type}>
           <Alert.Heading>{props.toast.title}</Alert.Heading>
-          <p>{prepareMessage()}</p>
+          {prepareMessage()}
         </Alert>
       </div>
     </Fade>

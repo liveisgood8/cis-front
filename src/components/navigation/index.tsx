@@ -22,9 +22,14 @@ const NavigationBar: React.FC<{}> = () => {
     dispatch(push('/login'));
   };
 
+  const onProfile = (): void => {
+    dispatch(push('/profile'));
+  };
+
   const userMenu = (
     <Tooltip id="overlay-example">
-      <span onClick={onLogout}>Выход</span>
+      <p onClick={onProfile}>Профиль</p>
+      <p onClick={onLogout}>Выход</p>
     </Tooltip>
   );
 

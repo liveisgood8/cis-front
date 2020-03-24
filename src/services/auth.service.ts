@@ -10,6 +10,10 @@ export function getAuthenticateData(): IAuthData | null {
   return null;
 }
 
+export function setAuthenticateData(data: IAuthData): void {
+  localStorage.setItem('authData', JSON.stringify(data));
+}
+
 export async function login(login: string, password: string): Promise<IAuthData> {
   const hashedPassword = md5(password);
   const response = await AxiosService.post('/auth/login', {
@@ -17,7 +21,7 @@ export async function login(login: string, password: string): Promise<IAuthData>
     password: hashedPassword,
   });
   const authData: IAuthData = response.data;
-  localStorage.setItem('authData', JSON.stringify(authData));
+  setAuthenticateData(authData);
   AxiosService.defaults.headers = {
     Authorization: `Bearer ${getAuthenticateData()?.accessToken}`,
   };
