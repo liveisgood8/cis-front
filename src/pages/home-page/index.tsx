@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 export default function HomePage(): JSX.Element {
   return (
     <div className="d-flex flex-column flex-grow-1 align-content-center">
-      <div className="d-flex flex-column align-items-center justify-content-center mt-auto">
+      <div className="d-flex flex-column align-items-center justify-content-center mt-auto text-center">
         <div style={{ fontSize: '2em' }}>
           <FontAwesomeIcon className="mr-2" color="#7386D5" icon={faHandPeace} />
           <span>Добро пожаловать!</span>
