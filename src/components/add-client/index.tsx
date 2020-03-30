@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
+import { toast } from 'react-toastify';
 import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
-import { addToastAction } from '../../stores/toast/actions';
 import { addClientAction } from '../../stores/business-entities/actions';
+import { handleAxiosError } from '../../utils/axios';
 
 
 interface IState {
@@ -28,16 +29,9 @@ class AddClientComponent extends React.Component<{}, IState> {
         comment: this.state.comment,
         email: '',
       }));
-      store.dispatch(addToastAction({
-        message: 'Клиент успешно добавлен',
-        type: 'info',
-      }));
+      toast.success('Клиент успешно добавлен');
     } catch (err) {
-      store.dispatch(addToastAction({
-        title: 'Не удалось добавить клиента',
-        message: err.response?.data.message || err.message,
-        type: 'danger',
-      }));
+      handleAxiosError(err, 'Не удалось добавить клиента');
     }
   }
 

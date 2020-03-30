@@ -4,7 +4,7 @@ import { IAuthData } from './types';
 import { push } from 'connected-react-router';
 import { AxiosError } from 'axios';
 import { AppThunkAction } from '../../types';
-import { handleAxiosError } from '../axios/actions';
+import { handleAxiosError } from '../../utils/axios';
 
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IAuthData, '@@auth/loginSuccess'>('@@auth/loginSuccess');
@@ -28,7 +28,7 @@ export const loginAsync = (
     })
     .catch((err: AxiosError) => {
       dispatch(loginFailedAction());
-      dispatch(handleAxiosError(err, 'Неизвестная ошибка при аутентификации'));
+      handleAxiosError(err, 'Неизвестная ошибка при аутентификации');
     });
 };
 
@@ -53,6 +53,6 @@ export const registerAsync = (
     dispatch(push('/login'));
   } catch (err) {
     dispatch(registerFailedAction());
-    dispatch(handleAxiosError(err, 'Неизвестная ошибка при регистрации'));
+    handleAxiosError(err, 'Неизвестная ошибка при регистрации');
   }
 };

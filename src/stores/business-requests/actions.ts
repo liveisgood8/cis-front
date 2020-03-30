@@ -1,7 +1,7 @@
 import { createAction } from '@reduxjs/toolkit';
 import { AppThunkAction } from '../../types';
 import { getPendingNumber, getAll } from '../../services/business-requests.service';
-import { handleAxiosError } from '../axios/actions';
+import { handleAxiosError } from '../../utils/axios';
 import { IBusinessRequest } from './types';
 
 export const addRequest = createAction<IBusinessRequest>('@@business-requests/addRequest');
@@ -15,7 +15,7 @@ export const fetchPendingNumber = (): AppThunkAction<Promise<void>> => async (di
     const pendingNumber = await getPendingNumber();
     dispatch(setPendingNumber(pendingNumber));
   } catch (err) {
-    dispatch(handleAxiosError(err, 'Не удалось получить количество ожидающих обработку обращений'));
+    handleAxiosError(err, 'Не удалось получить количество ожидающих обработку обращений');
   }
 };
 
@@ -24,6 +24,6 @@ export const fetchRequests = (): AppThunkAction<Promise<void>> => async (dispatc
     const requests = await getAll();
     dispatch(setRequests(requests));
   } catch (err) {
-    dispatch(handleAxiosError(err, 'Не удалось получить список обращений'));
+    handleAxiosError(err, 'Не удалось получить список обращений');
   }
 };

@@ -8,11 +8,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import ru from 'date-fns/locale/ru';
 import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
-import { addToastAction } from '../../stores/toast/actions';
 import { getClientsAsync, addContractAction } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IClient } from '../../stores/business-entities/types';
-import { handleAxiosError } from '../../stores/axios/actions';
+import { handleAxiosError } from '../../utils/axios';
+import { toast } from 'react-toastify';
 
 interface IReduxProps {
   clients: IClient[];
@@ -91,12 +91,9 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
         comment: this.state.comment,
         client: this.state.client as IClient,
       }));
-      store.dispatch(addToastAction({
-        message: 'Договор успешно добавлен',
-        type: 'info',
-      }));
+      toast.success('Договор успешно добавлен');
     } catch (err) {
-      store.dispatch<any>(handleAxiosError(err));
+      handleAxiosError(err, 'Не удалось добавить договор');
     }
   }
 

@@ -3,7 +3,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { IBusinessRequest } from '../../stores/business-requests/types';
 import { getById, handleBusinessRequest } from '../../services/business-requests.service';
 import { useDispatch } from 'react-redux';
-import { handleAxiosError } from '../../stores/axios/actions';
+import { handleAxiosError } from '../../utils/axios';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { decreasePendingNumber } from '../../stores/business-requests/actions';
 import { push } from 'connected-react-router';
@@ -29,7 +29,7 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
         setRequest(requests);
         setEmail(request?.contract?.client?.email);
       } catch (err) {
-        dispatch(handleAxiosError(err));
+        handleAxiosError(err, 'Не удалось получить информации об обращении');
       }
     })();
   }, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -45,7 +45,7 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
       dispatch(decreasePendingNumber());
       dispatch(push('/requests'));
     } catch (err) {
-      dispatch(handleAxiosError(err));
+      handleAxiosError(err, 'Не удалось утвердить обработку обращения');
     }
     setHandling(false);
   };

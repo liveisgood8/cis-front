@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { handleAxiosError } from '../../stores/axios/actions';
+import { handleAxiosError } from '../../utils/axios';
 import { Form, Button } from 'react-bootstrap';
 import { IUser } from '../../stores/auth/types';
 import { IClient, IContract } from '../../stores/business-entities/types';
@@ -34,9 +34,9 @@ export const AddRequestComponent: React.FC<{}> = () => {
         setSelectedContract(contracts[0]);
       }
     } catch (err) {
-      dispatch(handleAxiosError(err, 'Не удалось получить список договоров'));
+      handleAxiosError(err, 'Не удалось получить список договоров');
     }
-  }, [dispatch]);
+  }, []);
 
   React.useEffect(() => {
     (async (): Promise<void> => {
@@ -55,7 +55,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
           setSelectedUser(users[0]);
         }
       } catch (err) {
-        dispatch(handleAxiosError(err, 'Не удалось получить список клиентов или пользователей'));
+        handleAxiosError(err, 'Не удалось получить список клиентов или пользователей');
       }
     })();
   }, [dispatch, updateContracts]);
@@ -74,7 +74,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
         dispatch(increasePendingNumber());
       }
     } catch (err) {
-      dispatch(handleAxiosError(err));
+      handleAxiosError(err, 'Не удалось добавить обращение');
     }
   };
   const onClientChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {

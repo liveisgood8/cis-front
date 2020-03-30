@@ -3,9 +3,9 @@ import { Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { ImagePickerComponent } from '../image-picker';
 import { useDispatch } from 'react-redux';
 import { fetchUsersImageList } from '../../services/user.service';
-import { handleAxiosError } from '../../stores/axios/actions';
+import { handleAxiosError } from '../../utils/axios';
 import { IUser } from '../../stores/auth/types';
-import { addToastAction } from '../../stores/toast/actions';
+import { toast } from 'react-toastify';
 
 interface IProps {
   defaultUser?: IUser;
@@ -42,7 +42,7 @@ export const ProfileSettingsComponent: React.FC<IProps> = (props) => {
           setImage(defaultUser.imageUrl as string);
         }
       } catch (err) {
-        dispatch(handleAxiosError(err, 'Не удалось получить список изображений профиля'));
+        handleAxiosError(err, 'Не удалось получить список изображений профиля');
       }
     })();
   }, [dispatch, defaultUser]);
@@ -50,11 +50,7 @@ export const ProfileSettingsComponent: React.FC<IProps> = (props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     if (password !== passwordConfirm) {
-      dispatch(addToastAction({
-        message: 'Подтверждение пароля не совпадает с паролем',
-        type: 'warning',
-        title: 'Указаны некорректные данные',
-      }));
+      toast.warn('Подтверждение пароля не совпадает с паролем');
       return;
     }
     setSubmitting(true);

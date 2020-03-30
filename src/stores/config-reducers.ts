@@ -3,8 +3,6 @@ import { combineReducers } from 'redux';
 import { authenticateReducer } from './auth/reducer';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
-import { IToastState } from './toast/types';
-import { toastsReducer } from './toast/reducer';
 import { IBusinessEntities } from './business-entities/types';
 import { businessEntitiesReducer } from './business-entities/reducer';
 import { sideBarReduces } from './sidebar/reducer';
@@ -19,7 +17,6 @@ export interface IApplicationState {
   auth: IAuthenticateState;
   businessEntities: IBusinessEntities;
   sideBar: ISideBarState;
-  toasts: IToastState;
   permissions: IPermissionsState;
   businessRequests: IBusinessRequestsState;
 }
@@ -30,7 +27,6 @@ const createRootReducer = (history: History) =>
     auth: authenticateReducer,
     businessEntities: businessEntitiesReducer,
     sideBar: sideBarReduces,
-    toasts: toastsReducer,
     permissions: permissionsReducer,
     businessRequests: businessRequestsReducer,
   });

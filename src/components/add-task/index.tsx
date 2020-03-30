@@ -4,10 +4,11 @@ import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
-import { addToastAction } from '../../stores/toast/actions';
 import { getContractsAsync, getClientsAsync, addTaskAction } from '../../stores/business-entities/actions';
 import { IContract, IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
+import { toast } from 'react-toastify';
+import { handleAxiosError } from '../../utils/axios';
 
 
 interface IState {
@@ -68,17 +69,9 @@ class AddTaskComponent extends React.Component<PropsFromRedux, IState> {
         doneTo: this.state.doneTo as Date,
         description: this.state.description as string,
       }));
-      store.dispatch(addToastAction({
-        message: 'Задача успешна добавлена',
-        type: 'info',
-      }));
+      toast.success('Задача успешно добавлена');
     } catch (err) {
-      console.log(err.response?.data);
-      store.dispatch(addToastAction({
-        title: 'Не удалось добавить задачу',
-        message: err.response?.data.message || err.message,
-        type: 'danger',
-      }));
+      handleAxiosError(err, 'Не удалось добавить задачу');
     }
   }
 

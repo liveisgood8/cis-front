@@ -3,7 +3,6 @@ import { Container, Row, Col} from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import { registerAsync } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
-import { addToastAction } from '../../stores/toast/actions';
 import { ProfileSettingsComponent } from '../../components/profile-settings';
 import { IUser } from '../../stores/auth/types';
 
@@ -17,7 +16,6 @@ const mapState = (state: IApplicationState): IStateProps => ({
 
 const mapDispatch = {
   registerAsync,
-  addToastAction,
 };
 
 const connector = connect(

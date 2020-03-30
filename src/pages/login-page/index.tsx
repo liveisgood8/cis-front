@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Row, Col, Button, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Button, InputGroup, Form } from 'react-bootstrap';
 import { FormControl } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import { loginAsync } from '../../stores/auth/actions';
@@ -42,7 +42,8 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
     };
   }
 
-  private onLogin(): void {
+  private onLogin(e: React.FormEvent<HTMLFormElement>): void {
+    e.preventDefault();
     this.props.loginAsync(this.state.login, this.state.password);
   }
 
@@ -75,27 +76,30 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
         <Row className="flex-grow-1 flex-column justify-content-center">
           <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
             className="d-flex flex-column p-4 border rounded shadow-sm bg-white mb-4">
-            <p className="mb-3 mt-2 align-self-center font-weight-bold">Вход в систему</p>
-            <InputGroup className="mb-3">
-              <FormControl
-                required
-                placeholder="Логин"
-                onChange={this.handleLoginChange.bind(this)}
-              />
-            </InputGroup>
-            <InputGroup className="mb-3">
-              <FormControl
-                required
-                type="password"
-                placeholder="Пароль"
-                onChange={this.handlePasswordChange.bind(this)}
-              />
-            </InputGroup>
-            <Button
-              disabled={this.props.loggingIn}
-              onClick={this.onLogin.bind(this)}>
-              {this.props.loggingIn ? 'Вход...' : 'Вход'}
-            </Button>
+            <Form onSubmit={this.onLogin.bind(this)}>
+              <p className="mb-3 mt-2 align-self-center font-weight-bold text-center">Вход в систему</p>
+              <InputGroup className="mb-3">
+                <FormControl
+                  required
+                  placeholder="Логин"
+                  onChange={this.handleLoginChange.bind(this)}
+                />
+              </InputGroup>
+              <InputGroup className="mb-3">
+                <FormControl
+                  required
+                  type="password"
+                  placeholder="Пароль"
+                  onChange={this.handlePasswordChange.bind(this)}
+                />
+              </InputGroup>
+              <Button
+                type="submit"
+                disabled={this.props.loggingIn}
+              >
+                {this.props.loggingIn ? 'Вход...' : 'Вход'}
+              </Button>
+            </Form>
           </Col>
           <Col xs={{ offset: 1, span: 10 }} md={{ offset: 4, span: 4 }}
             className="d-flex justify-content-center p-2 border rounded shadow-sm bg-white">

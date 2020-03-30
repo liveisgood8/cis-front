@@ -1,6 +1,5 @@
 import { AxiosError } from 'axios';
-import { AppThunkAction } from '../../types';
-import { addToastAction } from '../toast/actions';
+import { toast } from 'react-toastify';
 
 export enum Errors {
   /** Неизвестная ошибка */
@@ -57,9 +56,8 @@ function codeToMessage(code: Errors): string | undefined {
 }
 
 export const handleAxiosError = (
-  err: AxiosError, defaultMessage?: string,
-): AppThunkAction<void> => (dispatch): void => {
-  console.error('axios error', err);
+  err: AxiosError, defaultMessage: string,
+): void => {
   let message = '';
   if (err.code === 'ECONNABORTED') {
     message = 'Не удалось подключиться к серверу';
@@ -73,9 +71,5 @@ export const handleAxiosError = (
     }
     message += err.response.data.message;
   }
-  dispatch(addToastAction({
-    title: message ? undefined : defaultMessage,
-    message: message,
-    type: 'danger',
-  }));
+  toast.error(message || defaultMessage);
 };
