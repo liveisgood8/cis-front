@@ -6,6 +6,8 @@ import { AxiosError } from 'axios';
 import { AppThunkAction } from '../../types';
 import { handleAxiosError } from '../../utils/axios';
 
+export const setAuthUserImageUrl = createAction<string>('@@auth/setAuthUserImageUrl');
+
 export const loginRequestAction = createAction<void, '@@auth/loginRequest'>('@@auth/loginRequest');
 export const loginSuccessAction = createAction<IAuthData, '@@auth/loginSuccess'>('@@auth/loginSuccess');
 export const loginFailedAction = createAction<void, '@@auth/loginFailed'>('@@auth/loginFailed');

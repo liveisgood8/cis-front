@@ -6,6 +6,7 @@ import { fetchUsersImageList } from '../../services/user.service';
 import { handleAxiosError } from '../../utils/axios';
 import { IUser } from '../../stores/auth/types';
 import { toast } from 'react-toastify';
+import { setAuthUserImageUrl } from '../../stores/auth/actions';
 
 interface IProps {
   defaultUser?: IUser;
@@ -62,7 +63,13 @@ export const ProfileSettingsComponent: React.FC<IProps> = (props) => {
       surname,
       imageUrl: image as string,
     });
+    if (image) {
+      dispatch(setAuthUserImageUrl(image));
+    }
     setSubmitting(false);
+    toast.success('Настройка профиля успешно обновлены', {
+      autoClose: 2500,
+    });
   };
 
   return (

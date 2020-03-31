@@ -5,7 +5,7 @@ import { History } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
 import HomePage from '../pages/home-page';
 import LoginPage from '../pages/login-page';
-import NotFoundedPage from '../pages/not-founded-page';
+import { NotFoundedPage } from '../pages/not-founded-page';
 import { PrivateLayoutRoute } from './private-layout-route';
 import AddClientComponent from '../components/add-client';
 import AddContractComponent from '../components/add-contract';
@@ -15,6 +15,7 @@ import RegisterPage from '../pages/register-page';
 import { HandleRequestComponent } from '../components/handle-request';
 import { AddRequestComponent } from '../components/add-request';
 import { AuthProfileSettingsComponent } from '../components/profile-settings/auth-profile-settings';
+import { TaskDetailsContainer } from '../components/task-details';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -32,6 +33,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/addRequest" component={AddRequestComponent} />
       <PrivateLayoutRoute exact path="/requests" component={RequestListComponent} />
       <PrivateLayoutRoute exact path="/handleRequest/:id" component={HandleRequestComponent} />
+      <PrivateLayoutRoute exact path="/task/:id" component={TaskDetailsContainer} />
       <PrivateLayoutRoute exact path="/profile" component={AuthProfileSettingsComponent} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>

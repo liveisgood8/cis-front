@@ -5,7 +5,8 @@ import {
   loginFailedAction,
   registerRequestAction,
   registerFailedAction, 
-  registerSuccessAction} from './actions';
+  registerSuccessAction,
+  setAuthUserImageUrl} from './actions';
 import { createReducer } from '@reduxjs/toolkit';
 import { IAuthenticateState } from './types';
 
@@ -25,6 +26,12 @@ export const authenticateReducer = createReducer(initialState, (builder) => {
       ...state,
       loggingIn: false,
     }))
+    .addCase(setAuthUserImageUrl, (state, action) => {
+      if (state.authData) {
+        state.authData.user.imageUrl = action.payload;
+      }
+      return state;
+    })
     .addCase(registerRequestAction, (state) => ({ ...state, isRegistering: true }))
     .addCase(registerSuccessAction, (state) => ({ ...state, isRegistering: false }))
     .addCase(registerFailedAction, (state) => ({ ...state, isRegistering: false }));

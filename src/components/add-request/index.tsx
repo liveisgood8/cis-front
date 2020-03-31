@@ -17,7 +17,6 @@ export const AddRequestComponent: React.FC<{}> = () => {
   const [isClientsLoading, setClientsLoading] = React.useState<boolean>(true);
   const [isContractsLoading, setContractsLoading] = React.useState<boolean>(true);
   const [isUsersLoading, setUsersLoading] = React.useState<boolean>(true);
-  const [selectedClient, setSelectedClient] = React.useState<IClient>();
   const [selectedContract, setSelectedContract] = React.useState<IContract>();
   const [selectedUser, setSelectedUser] = React.useState<IUser>();
   const [title, setTitle] = React.useState<string>('');
@@ -49,7 +48,6 @@ export const AddRequestComponent: React.FC<{}> = () => {
         setClientsLoading(false);
         if (clients.length) {
           updateContracts(clients[0]);
-          setSelectedClient(clients[0]);
         }
         if (users.length) {
           setSelectedUser(users[0]);
@@ -79,7 +77,6 @@ export const AddRequestComponent: React.FC<{}> = () => {
   };
   const onClientChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const client = clients[+e.currentTarget.value];
-    setSelectedClient(client);
     updateContracts(client);
   };
 
@@ -126,7 +123,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
       </Form.Group>
 
       <Form.Group controlId="formBasicUser">
-        <Form.Label>Связанный клиент</Form.Label>
+        <Form.Label>Связанный пользователь</Form.Label>
         <Form.Control as="select"
           required
           onChange={onUserChange}>

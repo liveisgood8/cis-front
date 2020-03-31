@@ -21,7 +21,12 @@
   color: white;
   align-self: center;
   margin-left: 15px;
-  margin-bottom: 5px;
+  transition: color 250ms;
+}
+
+.product-label:hover {
+  color: #3248a5;
+  text-decoration: none;
 }
 
 @media (max-width: 768px) {

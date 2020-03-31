@@ -57,7 +57,7 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit} className="flex-grow-1">
       <Form.Group controlId="formBasicEmail">
         <Form.Label>Электронный адрес клиента</Form.Label>
         <InputGroup>

@@ -34,7 +34,7 @@ export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
 
   if (props.request.length) {
     return (
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey="0" className="flex-grow-1">
         {props.request.map((e, i) => (
           <Card key={i} >
             <Accordion.Toggle as={Card.Header} className="request-header" variant="link" eventKey={i.toString()}>

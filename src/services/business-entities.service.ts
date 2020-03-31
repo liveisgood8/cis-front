@@ -23,3 +23,15 @@ export async function fetchTasks(contractId: number): Promise<ITask[]> {
   });
   return response.data;
 }
+
+export async function fetchSpecificTask(taskId: number): Promise<ITask> {
+  const response = await AxiosService.get('/tasks', {
+    params: {
+      id: taskId,
+    },
+  });
+  return {
+    ...(response.data as ITask),
+    doneTo: new Date((response.data as ITask).doneTo),
+  };
+}

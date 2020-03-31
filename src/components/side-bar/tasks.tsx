@@ -5,7 +5,6 @@ import { ITask } from '../../stores/business-entities/types';
 import { getTasksAsync } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
-import { store } from '../..';
 import { ViewTypes } from '.';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +26,7 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => ({
 
 const mapDispatch = {
   getTasksAsync,
+  push,
 };
 
 const connector = connect(
@@ -55,12 +55,12 @@ export class SideBarTasks extends React.Component<PropsFromRedux> {
   }
 
   private handleTaskClick(task: ITask): void {
-    console.log(task);
+    this.props.push(`/task/${task.id}${this.props.router.location.search}`);
   }
 
   private handleBackClick(): void {
-    store.dispatch(push(
-      `${this.props.router.location.pathname}?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`));
+    this.props.push(
+      `${this.props.router.location.pathname}?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`);
   }
 
   private addTaskComponentCreator(): JSX.Element | undefined {

@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import configStore from './stores/config-store';
 import { App } from './app';
 
+
 export const store = configStore();
 
 ReactDOM.render(
