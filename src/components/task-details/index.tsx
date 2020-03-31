@@ -54,7 +54,6 @@ export const TaskDetailsContainer: React.FC<RouteComponentProps<{ id: string }>>
       try {
         const task = await fetchSpecificTask(+id);
         setTask(task);
-        console.log(task, typeof task);
       } catch (err) {
         handleAxiosError(err, 'Не удалось получить информацию о задаче');
       }
