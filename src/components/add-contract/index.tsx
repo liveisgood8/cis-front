@@ -6,13 +6,13 @@ import { Form, Button, FormGroup } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { connect, ConnectedProps } from 'react-redux';
 import ru from 'date-fns/locale/ru';
-import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
 import { getClientsAsync, addContractAction } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IClient } from '../../stores/business-entities/types';
 import { handleAxiosError } from '../../utils/axios';
 import { toast } from 'react-toastify';
+import { postContract, postContractCopyFile } from '../../services/business-entities.service';
 
 interface IReduxProps {
   clients: IClient[];
@@ -70,22 +70,16 @@ export class AddContractComponent extends React.Component<PropsFromRedux, IState
     e.preventDefault();
     e.stopPropagation();
     try {
-      const formData = new FormData();
-      formData.append('contractCopyFile', this.state.scanFile as File);
-      const uploadResult = await AxiosService.post('/contracts/uploadCopyFile', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      const result = await AxiosService.post('/contracts', {
-        clientId: this.state.client?.id,
-        name: this.state.name,
-        conclusionDate: this.state.conclusionDate,
+      const contentPath = await postContractCopyFile(this.state.scanFile as File);
+      const id = await postContract({
+        clientId: this.state.client?.id as number,
+        name: this.state.name as string,
+        conclusionDate: this.state.conclusionDate as Date,
         comment: this.state.comment,
-        copyPath: uploadResult.data.contentPath,
+        copyPath: contentPath,
       });
       store.dispatch(addContractAction({
-        id: result.data,
+        id,
         name: this.state.name as string,
         conclusionDate: this.state.conclusionDate as Date,
         comment: this.state.comment,

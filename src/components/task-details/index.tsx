@@ -22,11 +22,11 @@ export const TaskDetails: React.SFC<{ task: ITask }> = ({ task }) => {
         </div>
         <div className="pt-10px">
           <strong className="mr-2">Клиент:</strong>
-          <span>{task.contract.client?.name}</span>
+          <span>{task.contract?.client?.name}</span>
         </div>
         <div className="bottom-splitter">
           <strong className="mr-2">Договор:</strong>
-          <span>{task.contract.name}</span>
+          <span>{task.contract?.name}</span>
         </div>
         <div className="pt-10px">
           <strong className="mr-2">Выполнить до:</strong>

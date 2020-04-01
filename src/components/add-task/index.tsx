@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
-import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
 import { getContractsAsync, getClientsAsync, addTaskAction } from '../../stores/business-entities/actions';
 import { IContract, IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { toast } from 'react-toastify';
 import { handleAxiosError } from '../../utils/axios';
+import { postTask } from '../../services/business-entities.service';
 
 
 interface IState {
@@ -56,14 +56,14 @@ class AddTaskComponent extends React.Component<PropsFromRedux, IState> {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const response = await AxiosService.post('/tasks', {
-        contractId: this.state.contract?.id,
-        name: this.state.name,
-        description: this.state.description,
-        doneTo: this.state.doneTo,
+      const id = await postTask({
+        contractId: this.state.contract?.id as number,
+        name: this.state.name as string,
+        description: this.state.description as string,
+        doneTo: this.state.doneTo as Date,
       });
       store.dispatch(addTaskAction({
-        id: response.data,
+        id,
         contract: this.state.contract as IContract,
         name: this.state.name as string,
         doneTo: this.state.doneTo as Date,

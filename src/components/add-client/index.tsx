@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { AxiosService } from '../../services/axios.service';
 import { store } from '../..';
 import { addClientAction } from '../../stores/business-entities/actions';
 import { handleAxiosError } from '../../utils/axios';
+import { postClient } from '../../services/business-entities.service';
 
 
 interface IState {
@@ -22,12 +22,11 @@ class AddClientComponent extends React.Component<{}, IState> {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const response = await AxiosService.post('/clients', this.state);
+      const id = await postClient(this.state);
       store.dispatch(addClientAction({
-        id: response.data,
+        id,
         name: this.state.name,
         comment: this.state.comment,
-        email: '',
       }));
       toast.success('Клиент успешно добавлен');
     } catch (err) {

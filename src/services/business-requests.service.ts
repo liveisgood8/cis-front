@@ -29,11 +29,7 @@ export async function getAll(): Promise<IBusinessRequest[]> {
 }
 
 export async function getById(id: number): Promise<IBusinessRequest> {
-  const response = await AxiosService.get('/business-requests', {
-    params: {
-      id,
-    },
-  });
+  const response = await AxiosService.get(`/business-requests/${id}`);
   return response.data;
 }
 
