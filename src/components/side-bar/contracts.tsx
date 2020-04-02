@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouterState, push } from 'connected-react-router';
 import { store } from '../../index';
-import { getTasksAsync, getContractsAsync } from '../../stores/business-entities/actions';
+import { getContractsAsync } from '../../stores/business-entities/actions';
 import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
@@ -28,7 +28,6 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => {
 };
 
 const mapDispatch = {
-  getTasksAsync,
   getContractsAsync,
 };
 

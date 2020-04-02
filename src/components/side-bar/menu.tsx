@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Location } from 'history';
-import { getClientsAsync, getContractsAsync, getTasksAsync } from '../../stores/business-entities/actions';
 import { connect, ConnectedProps } from 'react-redux';
 import { IApplicationState } from '../../stores/config-reducers';
 import { ViewTypes } from '.';
@@ -10,15 +9,6 @@ import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
-
-interface IElement {
-  name: string;
-  url: string;
-}
-
-interface ISideBarMenuState {
-  elements: IElement[];
-}
 
 interface IReduxProps {
   routerLocation: Location;
@@ -32,20 +22,13 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   isHasRegisterRequestPermission: isHasPermissionSelectorFactory(UserPermissions.REGISTER_REQUEST)(state),
 });
 
-const mapDispatch = {
-  getClientsAsync,
-  getContractsAsync,
-  getTasksAsync,
-};
-
 const connector = connect(
   mapStateToProps,
-  mapDispatch,
 );
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export class SideBarMenu extends React.Component<PropsFromRedux, ISideBarMenuState> {
+export class SideBarMenu extends React.Component<PropsFromRedux> {
   render(): JSX.Element {
     return (
       <div>

@@ -4,12 +4,10 @@ import { FormControl } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import { loginAsync } from '../../stores/auth/actions';
 import { IApplicationState } from '../../stores/config-reducers';
-import { IUser } from '../../stores/auth/types';
 import { Link } from 'react-router-dom';
 
 interface IStateProps {
   loggingIn: boolean;
-  user?: IUser;
 }
 
 interface ILoginPageState {
