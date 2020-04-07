@@ -6,15 +6,14 @@ import { LoginPage, PropsFromRedux } from '../../pages/login-page';
 Enzyme.configure({ adapter: new Adapter() });
 
 function setup(): {
-  props: PropsFromRedux,
-  loginMock: jest.Mock,
-  wrapper: Enzyme.ShallowWrapper,
-} {
+  props: PropsFromRedux;
+  loginMock: jest.Mock;
+  wrapper: Enzyme.ShallowWrapper;
+  } {
   const loginMock = jest.fn();
   const props: PropsFromRedux = {
     loggingIn: false,
-    user: undefined,
-    login: loginMock,
+    loginAsync: loginMock,
   };
   const wrapper = shallow(<LoginPage {...props}/>);
   return {
@@ -43,10 +42,12 @@ describe('Pages', () => {
       expect(wrapper.find('p').at(1).find('Link').prop('to')).toBe('/registration');
     });
 
-    it('call login on login button click', () => {
+    it('call login on submit form', () => {
       const { wrapper, loginMock } = setup();
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      const fakeEvent = { preventDefault: (): void => {} };
       expect(loginMock.mock.calls.length).toBe(0);
-      wrapper.find('Button').simulate('click');
+      wrapper.find('Form').simulate('submit', fakeEvent);
       expect(loginMock.mock.calls.length).toBe(1);
     });
   });

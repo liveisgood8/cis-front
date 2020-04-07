@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { connect, ConnectedProps } from 'react-redux';
 import { RouterState, push } from 'connected-react-router';
-import { store } from '../../index';
 import { getContractsAsync } from '../../stores/business-entities/actions';
 import { IContract } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
@@ -12,6 +11,7 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
 import { Link } from 'react-router-dom';
+import { store } from '../../stores/config-store';
 
 interface IReduxProps {
   contracts: IContract[];

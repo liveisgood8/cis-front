@@ -2,13 +2,13 @@ import * as React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { connect, ConnectedProps } from 'react-redux';
 import DatePicker from 'react-datepicker';
-import { store } from '../..';
 import { getContractsAsync, getClientsAsync, addTaskAction } from '../../stores/business-entities/actions';
 import { IContract, IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { toast } from 'react-toastify';
 import { handleAxiosError } from '../../utils/axios';
 import { postTask } from '../../services/business-entities.service';
+import { store } from '../../stores/config-store';
 
 
 interface IState {

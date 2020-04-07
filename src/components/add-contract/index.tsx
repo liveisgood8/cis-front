@@ -6,13 +6,13 @@ import { Form, Button, FormGroup } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { connect, ConnectedProps } from 'react-redux';
 import ru from 'date-fns/locale/ru';
-import { store } from '../..';
 import { getClientsAsync, addContractAction } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IClient } from '../../stores/business-entities/types';
 import { handleAxiosError } from '../../utils/axios';
 import { toast } from 'react-toastify';
 import { postContract, postContractCopyFile } from '../../services/business-entities.service';
+import { store } from '../../stores/config-store';
 
 interface IReduxProps {
   clients: IClient[];

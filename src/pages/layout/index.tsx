@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import SideBar from '../../components/side-bar';
 import NavigationBar from '../../components/navigation';
 
-const Layout: React.SFC<React.PropsWithChildren<{}>> = (props) => {
+export const Layout: React.SFC<React.PropsWithChildren<{}>> = (props) => {
   return (
     <React.Fragment>
       <NavigationBar />
@@ -21,5 +21,3 @@ const Layout: React.SFC<React.PropsWithChildren<{}>> = (props) => {
 Layout.propTypes = {
   children: PropTypes.element.isRequired,
 };
-
-export default Layout;

@@ -5,13 +5,13 @@ import { getClientsAsync } from '../../stores/business-entities/actions';
 import { IClient } from '../../stores/business-entities/types';
 import { IApplicationState } from '../../stores/config-reducers';
 import { BaseEntitiesList } from './base-entities';
-import { store } from '../..';
 import { ViewTypes } from './';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
 import { Link } from 'react-router-dom';
+import { store } from '../../stores/config-store';
 
 interface IReduxProps {
   clients: IClient[];

@@ -7,7 +7,7 @@ import { routerMiddleware } from 'connected-react-router';
 
 export const history: History = createBrowserHistory();
 
-export default function configStore(
+function configStore(
   initialState?: IApplicationState,
 ): Store<IApplicationState> {
   // const store = createStore(
@@ -23,3 +23,5 @@ export default function configStore(
   });
   return store;
 }
+
+export const store = configStore();

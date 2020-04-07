@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Route, RouteProps } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
-import Layout from '../pages/layout';
+import { Layout } from '../pages/layout';
 
 const LayoutRoot: React.SFC<RouteProps> = ({ component: Component, ...rest }) => {
   if (!Component) {

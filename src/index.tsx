@@ -3,16 +3,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
-import configStore from './stores/config-store';
-import { App } from './app';
+import App from './app';
+import { store } from './stores/config-store';
 
-
-export const store = configStore();
 
 ReactDOM.render(
-  <Provider store={store}>
+  (<Provider store={store}>
     <App />
-  </Provider>,
+  </Provider>),
   document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { store } from '../..';
 import { addClientAction } from '../../stores/business-entities/actions';
 import { handleAxiosError } from '../../utils/axios';
 import { postClient } from '../../services/business-entities.service';
+import { store } from '../../stores/config-store';
 
 
 interface IState {

@@ -2,9 +2,9 @@ import * as React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { IBaseBusinessEntity } from '../../stores/business-entities/types';
-import { store } from '../..';
 import { push, getLocation } from 'connected-react-router';
 import { ViewTypes } from '.';
+import { store } from '../../stores/config-store';
 
 interface IState {
   mounted: boolean;
