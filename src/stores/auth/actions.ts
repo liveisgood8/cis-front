@@ -29,6 +29,7 @@ export const loginAsync = (
       dispatch(push('/'));
     })
     .catch((err: AxiosError) => {
+      console.log(err);
       dispatch(loginFailedAction());
       handleAxiosError(err, 'Неизвестная ошибка при аутентификации');
     });

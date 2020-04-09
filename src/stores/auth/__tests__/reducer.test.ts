@@ -1,13 +1,13 @@
-import { authenticateReducer } from '../../../stores/auth/reducer';
-import { IAuthenticateState, IAuthData } from '../../../stores/auth/types';
-import { loginRequestAction, loginSuccessAction, loginFailedAction } from '../../../stores/auth/actions';
+import { authenticateReducer } from '../reducer';
+import { IAuthenticateState, IAuthData, IUser } from '../types';
+import { loginRequestAction, loginSuccessAction, loginFailedAction } from '../actions';
 
 describe('auth reducer', () => {
   it('default state', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: false,
+      isRegistering: false,
       authData: undefined,
-      error: undefined,
     };
     expect(authenticateReducer(undefined, { type: '' })).toEqual(expectedState);
   });
@@ -15,8 +15,8 @@ describe('auth reducer', () => {
   it('login request handle', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: true,
+      isRegistering: false,
       authData: undefined,
-      error: undefined,
     };
     expect(authenticateReducer(undefined, loginRequestAction())).toEqual(expectedState);
   });
@@ -25,14 +25,14 @@ describe('auth reducer', () => {
     const authData: IAuthData = {
       user: {
         name: 'test',
-      },
+      } as IUser,
       accessToken: 'access',
       refreshToken: 'refresh',
     };
     const expectedState: IAuthenticateState = {
       loggingIn: false,
+      isRegistering: false,
       authData: authData,
-      error: undefined,
     };
     expect(authenticateReducer(undefined, loginSuccessAction(authData))).toEqual(expectedState);
   });
@@ -41,10 +41,11 @@ describe('auth reducer', () => {
     const expectedState: IAuthenticateState = {
       loggingIn: false,
       authData: undefined,
-      error: 'test',
+      isRegistering: false,
     };
     expect(authenticateReducer({
       loggingIn: true,
-    }, loginFailedAction('test'))).toEqual(expectedState);
+      isRegistering: false,
+    }, loginFailedAction())).toEqual(expectedState);
   });
 });

@@ -4,7 +4,7 @@ import { IPermissionsState } from './types';
 
 const initialState: IPermissionsState = {
   userPermissions: [],
-}
+};
 
 export const permissionsReducer = createReducer(initialState, (builder) => {
   builder.addCase(setPermissionsAction, (state, action) => ({

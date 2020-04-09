@@ -1,7 +1,7 @@
 import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Layout } from '../../pages/layout';
+import { Layout } from '.';
 import SideBar from '../../components/side-bar';
 
 Enzyme.configure({ adapter: new Adapter() });

@@ -1,14 +1,9 @@
-import { AnyAction } from 'redux';
-import createMockStore from 'redux-mock-store';
-import thunk, { ThunkDispatch } from 'redux-thunk';
 import AxiosMock from 'axios-mock-adapter';
-import { IUser, IAuthData } from '../../../stores/auth/types';
-import { loginRequestAction, loginSuccessAction, loginFailedAction, loginAsync } from '../../../stores/auth/actions';
-import { IApplicationState } from '../../../stores/config-reducers';
+import { IUser, IAuthData } from '../types';
+import { loginRequestAction, loginSuccessAction, loginAsync } from '../actions';
 import { AxiosService } from '../../../services/axios.service';
-
-type DispatchExtension = ThunkDispatch<IApplicationState, void, AnyAction>;
-const mockStore = createMockStore<{}, DispatchExtension>([thunk]);
+import md5 from 'md5';
+import { mockStore } from '../../../__mocks__/store';
 
 const axiosMock = new AxiosMock(AxiosService);
 
@@ -22,32 +17,27 @@ describe('auth actions', () => {
   });
 
   it('login success', () => {
-    const user: IUser = {
-      name: 'test',
+    const authData: IAuthData = {
+      user: {
+        name: 'test',
+      } as IUser,
+      accessToken: '__accessToken__',
+      refreshToken: '__refreshToken__',
     };
 
     const expectedAction = {
       type: loginSuccessAction.type,
-      payload: user,
+      payload: authData,
     };
 
-    expect(loginSuccessAction(user)).toEqual(expectedAction);
-  });
-
-  it('login failed', () => {
-    const expectedAction = {
-      type: loginFailedAction.type,
-      payload: 'error',
-    };
-
-    expect(loginFailedAction('error')).toEqual(expectedAction);
+    expect(loginSuccessAction(authData)).toEqual(expectedAction);
   });
 
   it('login async', async () => {
     const authData: IAuthData = {
       user: {
         name: 'test',
-      },
+      } as IUser,
       accessToken: '__accessToken__',
       refreshToken: '__refreshToken__',
     };
@@ -62,14 +52,14 @@ describe('auth actions', () => {
       },
     ];
 
-    const store = mockStore({
+    const store = mockStore<{}>({
       auth: {},
       route: {},
     });
 
     axiosMock.onPost('/auth/login', {
       login: 'user',
-      password: 'password',
+      password: md5('password'),
     }).replyOnce(200, {
       user: authData.user,
       accessToken: authData.accessToken,

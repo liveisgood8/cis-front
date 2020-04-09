@@ -62,10 +62,10 @@ export const handleAxiosError = (
   if (err.code === 'ECONNABORTED') {
     message = 'Не удалось подключиться к серверу';
   }
-  if (err.response?.data.code) {
+  if (err.response?.data?.code) {
     message += codeToMessage(err.response.data.code);
   }
-  if (err.response?.data.message) {
+  if (err.response?.data?.message) {
     if (message) {
       message += '\n';
     }
