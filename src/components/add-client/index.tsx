@@ -1,107 +1,97 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { addClientAction } from '../../stores/business-entities/actions';
 import { handleAxiosError } from '../../utils/axios';
 import { postClient } from '../../services/business-entities.service';
-import { store } from '../../stores/config-store';
+import { useDispatch } from 'react-redux';
 
 
-interface IState {
-  name: string;
-  /**
-   * @maxLength 128
-   */
-  email: string;
-  address: string;
-  comment?: string;
-}
+const AddClientComponent: React.FC = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
+  const [comment, setComment] = useState('');
+  const dispatch = useDispatch();
 
-class AddClientComponent extends React.Component<{}, IState> {
-  private async handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    e.stopPropagation();
     try {
-      const id = await postClient(this.state);
-      store.dispatch(addClientAction({
+      const id = await postClient({
+        name,
+        address,
+        email,
+        comment,
+      });
+      dispatch(addClientAction({
         id,
-        name: this.state.name,
-        comment: this.state.comment,
+        name,
+        comment,
       }));
       toast.success('Клиент успешно добавлен');
     } catch (err) {
       handleAxiosError(err, 'Не удалось добавить клиента');
     }
-  }
+  };
 
-  private handleNameChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      name: e.currentTarget.value,
-    });
-  }
+  const handleNameChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setName(e.currentTarget.value);
+  };
 
-  private handleEmailChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      email: e.currentTarget.value,
-    });
-  }
+  const handleEmailChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setEmail(e.currentTarget.value);
+  };
 
-  private handleAddressChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      address: e.currentTarget.value,
-    });
-  }
+  const handleAddressChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setAddress(e.currentTarget.value);
+  };
 
-  private handleCommentChange(e: React.FormEvent<HTMLTextAreaElement>): void {
-    this.setState({
-      comment: e.currentTarget.value,
-    });
-  }
+  const handleCommentChange = (e: React.FormEvent<HTMLTextAreaElement>): void => {
+    setComment(e.currentTarget.value);
+  };
 
-  public render(): JSX.Element {
-    return (
-      <Form onSubmit={this.handleSubmit.bind(this)} className="flex-grow-1">
-        <Form.Group controlId="formBasicName">
-          <Form.Label>Имя клиента</Form.Label>
-          <Form.Control placeholder="Введите имя" required onChange={this.handleNameChange.bind(this)} />
-        </Form.Group>
+  return (
+    <Form onSubmit={handleSubmit} className="flex-grow-1">
+      <Form.Group controlId="formBasicName">
+        <Form.Label>Имя клиента</Form.Label>
+        <Form.Control placeholder="Введите имя" required onChange={handleNameChange} />
+      </Form.Group>
 
-        <Form.Group controlId="formBasicEmail">
-          <Form.Label>Электронная почта</Form.Label>
-          <InputGroup>
-            <InputGroup.Prepend>
-              <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
-            </InputGroup.Prepend>
-            <Form.Control
-              type="email"
-              placeholder="Введите эл. адрес"
-              aria-describedby="inputGroupPrepend"
-              required
-              onChange={this.handleEmailChange.bind(this)}
-            />
-          </InputGroup>
-        </Form.Group>
-
-        <Form.Group controlId="formBasicAddress">
-          <Form.Label>Юридический адрес</Form.Label>
-          <Form.Control placeholder="Введите юр. адрес" required onChange={this.handleAddressChange.bind(this)} />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>Примечание</Form.Label>
+      <Form.Group controlId="formBasicEmail">
+        <Form.Label>Электронная почта</Form.Label>
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text id="inputGroupPrepend">@</InputGroup.Text>
+          </InputGroup.Prepend>
           <Form.Control
-            as="textarea"
-            rows="3"
-            onChange={this.handleCommentChange.bind(this)}
+            type="email"
+            placeholder="Введите эл. адрес"
+            aria-describedby="inputGroupPrepend"
+            required
+            onChange={handleEmailChange}
           />
-        </Form.Group>
+        </InputGroup>
+      </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Добавить клиента
-        </Button>
-      </Form>
-    );
-  }
-}
+      <Form.Group controlId="formBasicAddress">
+        <Form.Label>Юридический адрес</Form.Label>
+        <Form.Control placeholder="Введите юр. адрес" required onChange={handleAddressChange} />
+      </Form.Group>
+
+      <Form.Group>
+        <Form.Label>Примечание</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows="3"
+          onChange={handleCommentChange}
+        />
+      </Form.Group>
+
+      <Button variant="primary" type="submit">
+        Добавить клиента
+      </Button>
+    </Form>
+  );
+};
 
 export default AddClientComponent;

@@ -2,6 +2,7 @@ import React from 'react';
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { LoginPage, PropsFromRedux } from '.';
+import { formEventMock } from '../../__mocks__/form-utils';
 
 Enzyme.configure({ adapter: new Adapter() });
 
@@ -44,10 +45,8 @@ describe('Pages', () => {
 
     it('call login on submit form', () => {
       const { wrapper, loginMock } = setup();
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      const fakeEvent = { preventDefault: (): void => {} };
       expect(loginMock.mock.calls.length).toBe(0);
-      wrapper.find('Form').simulate('submit', fakeEvent);
+      wrapper.find('Form').simulate('submit', formEventMock);
       expect(loginMock.mock.calls.length).toBe(1);
     });
   });

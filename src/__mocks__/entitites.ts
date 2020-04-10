@@ -1,5 +1,15 @@
 import { ITask, IContract, IClient } from '../stores/business-entities/types';
 import { IBusinessRequest } from '../stores/business-requests/types';
+import { IUser } from '../stores/auth/types';
+
+export const userMock = {
+  id: 1,
+  login: 'user_test_login',
+  password: 'some_strong_pass',
+  name: 'user name',
+  surname: 'user surname',
+  imageUrl: 'http://image',
+} as IUser;
 
 export const clientsMock = [
   {
