@@ -5,5 +5,5 @@ import createMockStore from 'redux-mock-store';
 
 type DispatchExtension = ThunkDispatch<IApplicationState, void, AnyAction>;
 export function mockStore<S>(state: DeepPartial<S>) {
-  return createMockStore<S, DispatchExtension>([thunk])(state);
+  return createMockStore<DeepPartial<S>, DispatchExtension>([thunk])(state);
 }

@@ -1,11 +1,10 @@
 import 'react-datepicker/dist/react-datepicker.css';
 import './styles.css';
 
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, FormGroup } from 'react-bootstrap';
-import DatePicker, { registerLocale } from 'react-datepicker';
-import { connect, ConnectedProps } from 'react-redux';
-import ru from 'date-fns/locale/ru';
+import DatePicker from 'react-datepicker';
+import { useDispatch, useSelector } from 'react-redux';
 import { getClientsAsync, addContractAction } from '../../stores/business-entities/actions';
 import { IApplicationState } from '../../stores/config-reducers';
 import { IClient } from '../../stores/business-entities/types';
@@ -14,176 +13,133 @@ import { toast } from 'react-toastify';
 import { postContract, postContractCopyFile } from '../../services/business-entities.service';
 import { store } from '../../stores/config-store';
 
-interface IReduxProps {
-  clients: IClient[];
-}
+export const AddContractComponent: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [client, setClient] = useState<IClient>();
+  const [name, setName] = useState('');
+  const [conclusionDate, setConclusionDate] = useState(new Date());
+  const [comment, setComment] = useState('');
+  const [scanFile, setScanFile] = useState<File | null>();
+  const clients = useSelector((state: IApplicationState) => state.businessEntities.clients);
+  const dispatch = useDispatch();
 
-const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  clients: state.businessEntities.clients,
-});
+  useEffect(() => {
+    (async (): Promise<void> => {
+      setIsLoading(true);
+      await dispatch(getClientsAsync());
+      if (clients.length) {
+        setClient(clients[0]);
+      }
+      setIsLoading(false);
+    })();
+  }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-const mapDispatch = {
-  getClientsAsync,
-};
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatch,
-);
-
-type PropsFromRedux = ConnectedProps<typeof connector>
-
-interface IState {
-  /**
-   * @isInt clientId must be an integer
-   */
-  client?: IClient;
-  name?: string;
-  conclusionDate?: Date;
-  scanFile?: File | null;
-  comment?: string;
-
-  isLoading: boolean;
-}
-
-
-export class AddContractComponent extends React.Component<PropsFromRedux, IState> {
-  constructor(props: PropsFromRedux) {
-    super(props);
-    registerLocale('ru', ru);
-    this.state = {
-      isLoading: true,
-    };
-  }
-
-  public componentDidMount(): void {
-    this.props.getClientsAsync()
-      .then(() => {
-        this.setState({
-          client: this.props.clients.length ? this.props.clients[0] : undefined,
-          isLoading: false,
-        });
-      });
-  }
-
-  private async handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      const contentPath = await postContractCopyFile(this.state.scanFile as File);
+      const contentPath = await postContractCopyFile(scanFile as File);
       const id = await postContract({
-        clientId: this.state.client?.id as number,
-        name: this.state.name as string,
-        conclusionDate: this.state.conclusionDate as Date,
-        comment: this.state.comment,
+        clientId: client?.id as number,
+        name,
+        conclusionDate,
+        comment,
         copyPath: contentPath,
       });
       store.dispatch(addContractAction({
         id,
-        name: this.state.name as string,
-        conclusionDate: this.state.conclusionDate as Date,
-        comment: this.state.comment,
-        client: this.state.client as IClient,
+        name,
+        conclusionDate,
+        comment,
+        client,
       }));
       toast.success('Договор успешно добавлен');
     } catch (err) {
       handleAxiosError(err, 'Не удалось добавить договор');
     }
-  }
+  };
 
-  private handleClientChange(e: React.FormEvent<HTMLInputElement>): void {
-    const client = this.props.clients.find((client) => client.name === e.currentTarget.value);
+  const handleClientChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const client = clients.find((client) => client.name === e.currentTarget.value);
     if (!client) {
       console.error('Could not find client id for client with name:', e.currentTarget.value);
     } else {
-      this.setState({
-        client: client,
-      });
+      setClient(client);
     }
-  }
+  };
 
-  private handleNameChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      name: e.currentTarget.value,
-    });
-  }
+  const handleNameChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setName(e.currentTarget.value);
+  };
 
-  private handleConclusionDateChange(date: Date): void {
-    this.setState({
-      conclusionDate: date,
-    });
-  }
+  const handleConclusionDateChange = (date: Date): void => {
+    setConclusionDate(date);
+  };
 
-  private handleCommentChange(e: React.FormEvent<HTMLTextAreaElement>): void {
-    this.setState({
-      comment: e.currentTarget.value,
-    });
-  }
+  const handleCommentChange = (e: React.FormEvent<HTMLTextAreaElement>): void => {
+    setComment(e.currentTarget.value);
+  };
 
-  private handleScanFileChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      scanFile: e.currentTarget.files?.item(0),
-    })
-  }
+  const handleScanFileChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setScanFile(e.currentTarget.files?.item(0));
+  };
 
-  public render(): JSX.Element {
-    return (
-      <Form className="flex-grow-1" onSubmit={this.handleSubmit.bind(this)}>
-        <Form.Group controlId="formBasicAddress">
-          <Form.Label>Связанный клиент</Form.Label>
-          <Form.Control as="select" required onChange={this.handleClientChange.bind(this)}>
-            {this.state.isLoading ? <option>Загрузка...</option> :
-              this.props.clients.map((e, i) => (
-                <option key={i}>{e.name}</option>
-              ))}
-          </Form.Control>
-        </Form.Group>
+  return (
+    <Form className="flex-grow-1" onSubmit={handleSubmit}>
+      <Form.Group controlId="formBasicAddress">
+        <Form.Label>Связанный клиент</Form.Label>
+        <Form.Control as="select" required onChange={handleClientChange}>
+          {isLoading ? <option>Загрузка...</option> :
+            clients.map((e, i) => (
+              <option key={i}>{e.name}</option>
+            ))}
+        </Form.Control>
+      </Form.Group>
 
-        <Form.Group controlId="formBasicName">
-          <Form.Label>Имя договора</Form.Label>
-          <Form.Control placeholder="Введите имя" required onChange={this.handleNameChange.bind(this)} />
-        </Form.Group>
+      <Form.Group controlId="formBasicName">
+        <Form.Label>Имя договора</Form.Label>
+        <Form.Control placeholder="Введите имя" required onChange={handleNameChange} />
+      </Form.Group>
 
 
-        <Form.Group>
-          <Form.Label>Дата подписания договора</Form.Label>
-          <DatePicker
-            className="form-control"
-            placeholderText="Выберите дату подписания договора"
-            locale='ru'
-            selected={this.state.conclusionDate}
-            onChange={this.handleConclusionDateChange.bind(this)}
-            required
-          />
-        </Form.Group>
+      <Form.Group>
+        <Form.Label>Дата подписания договора</Form.Label>
+        <DatePicker
+          className="form-control"
+          placeholderText="Выберите дату подписания договора"
+          locale='ru'
+          selected={conclusionDate}
+          onChange={handleConclusionDateChange}
+          required
+        />
+      </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Примечание</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows="3"
-            onChange={this.handleCommentChange.bind(this)}
-          />
-        </Form.Group>
+      <Form.Group>
+        <Form.Label>Примечание</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows="3"
+          onChange={handleCommentChange}
+        />
+      </Form.Group>
 
-        <FormGroup className="custom-file mb-3">
-          <Form.Control
-            type="file"
-            className="custom-file-input"
-            style={{ cursor: 'pointer' }}
-            onChange={this.handleScanFileChange.bind(this)}
-          />
-          <Form.Label className="custom-file-label" data-browse="Выбрать файл">
-            {this.state.scanFile ? this.state.scanFile.name : 'Выберите копию договора'}
-          </Form.Label>
-        </FormGroup>
+      <FormGroup className="custom-file mb-3">
+        <Form.Control
+          type="file"
+          className="custom-file-input"
+          style={{ cursor: 'pointer' }}
+          onChange={handleScanFileChange}
+        />
+        <Form.Label className="custom-file-label" data-browse="Выбрать файл">
+          {scanFile ? scanFile.name : 'Выберите копию договора'}
+        </Form.Label>
+      </FormGroup>
 
-        <Button variant="primary" type="submit">
-          Добавить договор
-        </Button>
-      </Form>
-    );
-  }
-}
+      <Button variant="primary" type="submit">
+        Добавить договор
+      </Button>
+    </Form>
+  );
+};
 
-export default connector(AddContractComponent);
+export default AddContractComponent;
