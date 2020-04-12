@@ -5,5 +5,8 @@
 import '@testing-library/jest-dom/extend-expect';
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+import { registerLocale } from 'react-datepicker';
+import ru from 'date-fns/locale/ru'; // the locale you want
 
+registerLocale('ru', ru);
 configure({ adapter: new Adapter() });

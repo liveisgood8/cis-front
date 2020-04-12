@@ -77,7 +77,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
   };
   const onClientChange = async (e: React.FormEvent<HTMLInputElement>): Promise<void> => {
     const client = clients[+e.currentTarget.value];
-    updateContracts(client);
+    await updateContracts(client);
   };
 
   const onContractChange = (e: React.FormEvent<HTMLInputElement>): void => {
@@ -143,7 +143,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
         />
       </Form.Group>
 
-      <Form.Group controlId="formTitle">
+      <Form.Group controlId="formText">
         <Form.Label>Текст обращения</Form.Label>
         <Form.Control
           as="textarea"

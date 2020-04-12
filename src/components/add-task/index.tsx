@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { connect, ConnectedProps } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import { getContractsAsync, getClientsAsync, addTaskAction } from '../../stores/business-entities/actions';
 import { IContract, IClient } from '../../stores/business-entities/types';
@@ -8,189 +8,143 @@ import { IApplicationState } from '../../stores/config-reducers';
 import { toast } from 'react-toastify';
 import { handleAxiosError } from '../../utils/axios';
 import { postTask } from '../../services/business-entities.service';
-import { store } from '../../stores/config-store';
 
+const AddTaskComponent: React.FC = () => {
+  const clients = useSelector((state: IApplicationState) => state.businessEntities.clients);
+  const contracts = useSelector((state: IApplicationState) => state.businessEntities.contracts);
+  const [isClientsLoading, setClientsLoading] = useState(false);
+  const [isContractsLoading, setContractsLoading] = useState(false);
+  const [contract, setContract] = useState<IContract | null>();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [doneTo, setDoneTo] = useState(new Date());
+  const dispatch = useDispatch();
 
-interface IState {
-  contract?: IContract;
-  name?: string;
-  description?: string;
-  doneTo?: Date;
+  const getContracts = useCallback(async (client: IClient): Promise<void> => {
+    await dispatch(getContractsAsync(client.id));
+    setContractsLoading(false);
+    setContract(contracts.length ? contracts[0] : null);
+  }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  isClientsLoading: boolean;
-  isContractsLoading: boolean;
-}
+  useEffect((): void => {
+    (async (): Promise<void> => {
+      await dispatch(getClientsAsync());
+      setClientsLoading(false);
+    })();
+  }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
 
-interface IReduxProps {
-  clients: IClient[];
-  contracts: IContract[];
-}
+  useEffect(() => {
+    if (clients.length) {
+      getContracts(clients[0]);
+    }
+  }, [clients, getContracts]);
 
-const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  clients: state.businessEntities.clients,
-  contracts: state.businessEntities.contracts,
-});
-
-const mapDispatch = {
-  getContractsAsync,
-  getClientsAsync,
-};
-
-const connector = connect(
-  mapStateToProps,
-  mapDispatch,
-);
-
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-class AddTaskComponent extends React.Component<PropsFromRedux, IState> {
-  constructor(props: PropsFromRedux) {
-    super(props);
-    this.state = {
-      isClientsLoading: true,
-      isContractsLoading: true,
-    };
-  }
-
-  private async handleSubmit(e: React.FormEvent<HTMLFormElement>): Promise<void> {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    e.stopPropagation();
     try {
       const id = await postTask({
-        contractId: this.state.contract?.id as number,
-        name: this.state.name as string,
-        description: this.state.description as string,
-        doneTo: this.state.doneTo as Date,
+        contractId: contract?.id as number,
+        name,
+        description,
+        doneTo,
       });
-      store.dispatch(addTaskAction({
+      dispatch(addTaskAction({
         id,
-        contract: this.state.contract as IContract,
-        name: this.state.name as string,
-        doneTo: this.state.doneTo as Date,
-        description: this.state.description as string,
+        contract: contract as IContract,
+        name,
+        description,
+        doneTo,
       }));
       toast.success('Задача успешно добавлена');
     } catch (err) {
       handleAxiosError(err, 'Не удалось добавить задачу');
     }
-  }
+  };
 
-  private async getContracts(client: IClient): Promise<void> {
-    await this.props.getContractsAsync(client.id);
-    this.setState({
-      isContractsLoading: false,
-      contract: this.props.contracts.length ? this.props.contracts[0] : undefined,
-    });
-  }
+  const handleNameChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    setName(e.currentTarget.value);
+  };
 
-  private handleNameChange(e: React.FormEvent<HTMLInputElement>): void {
-    this.setState({
-      name: e.currentTarget.value,
-    });
-  }
-
-  private handleClientChange(e: React.FormEvent<HTMLInputElement>): void {
-    const client = this.props.clients.find((client) => client.name === e.currentTarget.value);
+  const handleClientChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const client = clients.find((client) => client.name === e.currentTarget.value);
     if (!client) {
       console.error('Could not find client for client with name:', e.currentTarget.value);
     } else {
-      this.setState({
-        isContractsLoading: true,
-      });
-      this.getContracts(client);
+      setContractsLoading(true);
+      getContracts(client);
     }
-  }
+  };
 
-  private handleContractChange(e: React.FormEvent<HTMLInputElement>): void {
-    const contract = this.props.contracts.find((contract) => contract.name === e.currentTarget.value);
+  const handleContractChange = (e: React.FormEvent<HTMLInputElement>): void => {
+    const contract = contracts.find((contract) => contract.name === e.currentTarget.value);
     if (!contract) {
       console.error('Could not find contract for contract with name:', e.currentTarget.value);
     } else {
-      this.setState({
-        contract: contract,
-      });
+      setContract(contract);
     }
-  }
+  };
 
-  private handleDoneToChange(date: Date): void {
-    this.setState({
-      doneTo: date,
-    });
-  }
+  const handleDoneToChange = (date: Date): void => {
+    setDoneTo(date);
+  };
 
-  private handleDescriptionChange(e: React.FormEvent<HTMLTextAreaElement>): void {
-    this.setState({
-      description: e.currentTarget.value,
-    });
-  }
+  const handleDescriptionChange = (e: React.FormEvent<HTMLTextAreaElement>): void => {
+    setDescription(e.currentTarget.value);
+  };
 
-  public componentDidMount(): void {
-    this.props.getClientsAsync()
-      .then(() => {
-        this.setState({
-          isClientsLoading: false,
-        });
-        if (this.props.clients.length) {
-          this.getContracts(this.props.clients[0]);
-        }
-      });
-  }
+  return (
+    <Form className="flex-grow-1" onSubmit={handleSubmit}>
+      <Form.Group controlId="formBasicClient">
+        <Form.Label>Связанный клиент</Form.Label>
+        <Form.Control as="select" required onChange={handleClientChange}>
+          {isClientsLoading ? <option>Загрузка...</option> :
+            clients.map((e, i) => (
+              <option key={i}>{e.name}</option>
+            ))}
+        </Form.Control>
+      </Form.Group>
 
-  public render(): JSX.Element {
-    return (
-      <Form className="flex-grow-1" onSubmit={this.handleSubmit.bind(this)}>
-        <Form.Group controlId="formBasicClient">
-          <Form.Label>Связанный клиент</Form.Label>
-          <Form.Control as="select" required onChange={this.handleClientChange.bind(this)}>
-            {this.state.isClientsLoading ? <option>Загрузка...</option> :
-              this.props.clients.map((e, i) => (
-                <option key={i}>{e.name}</option>
-              ))}
-          </Form.Control>
-        </Form.Group>
+      <Form.Group controlId="formBasicContract">
+        <Form.Label>Связанный контракт</Form.Label>
+        <Form.Control as="select" required onChange={handleContractChange}>
+          {isContractsLoading ? <option>Загрузка...</option> :
+            contracts.map((e, i) => (
+              <option key={i}>{e.name}</option>
+            ))}
+        </Form.Control>
+      </Form.Group>
 
-        <Form.Group controlId="formBasicContract">
-          <Form.Label>Связанный контракт</Form.Label>
-          <Form.Control as="select" required onChange={this.handleContractChange.bind(this)}>
-            {this.state.isContractsLoading ? <option>Загрузка...</option> :
-              this.props.contracts.map((e, i) => (
-                <option key={i}>{e.name}</option>
-              ))}
-          </Form.Control>
-        </Form.Group>
+      <Form.Group controlId="formBasicName">
+        <Form.Label>Имя задачи</Form.Label>
+        <Form.Control placeholder="Введите имя" required onChange={handleNameChange} />
+      </Form.Group>
 
-        <Form.Group controlId="formBasicName">
-          <Form.Label>Имя задачи</Form.Label>
-          <Form.Control placeholder="Введите имя" required onChange={this.handleNameChange.bind(this)} />
-        </Form.Group>
+      <Form.Group>
+        <Form.Label>Срок выполнения задачи</Form.Label>
+        <DatePicker
+          className="form-control"
+          placeholderText="Выберите срок выполнения задачи"
+          locale='ru'
+          selected={doneTo}
+          onChange={handleDoneToChange}
+          required
+        />
+      </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Срок выполнения задачи</Form.Label>
-          <DatePicker
-            className="form-control"
-            placeholderText="Выберите срок выполнения задачи"
-            locale='ru'
-            selected={this.state.doneTo}
-            onChange={this.handleDoneToChange.bind(this)}
-            required
-          />
-        </Form.Group>
+      <Form.Group>
+        <Form.Label>Описание</Form.Label>
+        <Form.Control
+          as="textarea"
+          rows="3"
+          onChange={handleDescriptionChange}
+        />
+      </Form.Group>
 
-        <Form.Group>
-          <Form.Label>Описание</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows="3"
-            onChange={this.handleDescriptionChange.bind(this)}
-          />
-        </Form.Group>
+      <Button variant="primary" type="submit">
+        Добавить задачу
+      </Button>
+    </Form>
+  );
+};
 
-        <Button variant="primary" type="submit">
-          Добавить задачу
-        </Button>
-      </Form>
-    );
-  }
-}
-
-export default connector(AddTaskComponent);
+export default AddTaskComponent;

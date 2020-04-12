@@ -11,7 +11,6 @@ import { IClient } from '../../stores/business-entities/types';
 import { handleAxiosError } from '../../utils/axios';
 import { toast } from 'react-toastify';
 import { postContract, postContractCopyFile } from '../../services/business-entities.service';
-import { store } from '../../stores/config-store';
 
 export const AddContractComponent: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -36,7 +35,6 @@ export const AddContractComponent: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    e.stopPropagation();
     try {
       const contentPath = await postContractCopyFile(scanFile as File);
       const id = await postContract({
@@ -46,7 +44,7 @@ export const AddContractComponent: React.FC = () => {
         comment,
         copyPath: contentPath,
       });
-      store.dispatch(addContractAction({
+      dispatch(addContractAction({
         id,
         name,
         conclusionDate,

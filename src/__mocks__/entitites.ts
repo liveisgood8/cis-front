@@ -86,3 +86,22 @@ export const requestsMock = [
     contract: contractsMock[1],
   },
 ] as IBusinessRequest[];
+
+export const usersMock = [
+  {
+    id: 1,
+    login: 'login1',
+    password: 'password1',
+    name: 'name1',
+    surname: 'surname1',
+    imageUrl: 'https://some_url1',
+  },
+  {
+    id: 2,
+    login: 'login2',
+    password: '32rvvT43bh546',
+    name: 'name2',
+    surname: 'surname2',
+    imageUrl: 'https://some_url222',
+  },
+] as IUser[];
