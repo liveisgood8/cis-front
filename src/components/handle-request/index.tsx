@@ -32,7 +32,7 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
         handleAxiosError(err, 'Не удалось получить информации об обращении');
       }
     })();
-  }, [dispatch, id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();

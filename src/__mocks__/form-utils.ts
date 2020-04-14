@@ -4,5 +4,8 @@ export const formEventMock = { preventDefault: (): void => { } };
 export const changeEventMock = (value: string) => ({
   currentTarget: {
     value,
+    style: {
+      height: '1px',
+    },
   },
 });

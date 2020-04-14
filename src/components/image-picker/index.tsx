@@ -25,7 +25,7 @@ export const ImagePickerComponent: React.FC<IProps> = (props) => {
     if (imageIndex < props.imageUrlList.length - 1) {
       const newImageIndex = imageIndex + 1;
       setImageIndex(newImageIndex);
-      props.onImageChange(props.imageUrlList[newImageIndex], imageIndex);
+      props.onImageChange(props.imageUrlList[newImageIndex], newImageIndex);
     }
   };
 
