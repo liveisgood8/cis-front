@@ -1,41 +1,25 @@
 import './styles.css';
 import * as React from 'react';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { IApplicationState } from '../../stores/config-reducers';
-import { IBusinessRequest } from '../../stores/business-requests/types';
 import { fetchRequests } from '../../stores/business-requests/actions';
 import { Accordion, Card, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentSlash } from '@fortawesome/free-solid-svg-icons';
 
-interface IReduxProps {
-  request: IBusinessRequest[];
-}
-
-const mapStateToProps = (state: IApplicationState): IReduxProps => ({
-  request: state.businessRequests.requests,
-});
-
-const mapDispatch = {
-  fetchRequests,
-  push,
-};
-
-const connector = connect(mapStateToProps, mapDispatch);
-type PropsFromRedux = ConnectedProps<typeof connector>;
-
-export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
-  const { fetchRequests } = props;
+export const RequestListComponent: React.SFC = () => {
+  const requests = useSelector((state: IApplicationState) => state.businessRequests.requests);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
-    fetchRequests();
-  }, [fetchRequests]);
+    dispatch(fetchRequests());
+  }, [dispatch]);
 
-  if (props.request.length) {
+  if (requests.length) {
     return (
       <Accordion defaultActiveKey="0" className="flex-grow-1">
-        {props.request.map((e, i) => (
+        {requests.map((e, i) => (
           <Card key={i} >
             <Accordion.Toggle as={Card.Header} className="request-header" variant="link" eventKey={i.toString()}>
               {e.title}
@@ -47,7 +31,7 @@ export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
                 <Button
                   variant="primary"
                   className="align-self-end"
-                  onClick={() => props.push(`/handleRequest/${e.id}`)}>Обработать</Button>
+                  onClick={() => dispatch(push(`/handleRequest/${e.id}`))}>Обработать</Button>
               </Card.Body>
             </Accordion.Collapse>
           </Card>
@@ -66,4 +50,4 @@ export const RequestListComponent: React.SFC<PropsFromRedux> = (props) => {
   }
 };
 
-export default connector(RequestListComponent);
+export default RequestListComponent;

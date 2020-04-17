@@ -11,7 +11,6 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
 import { Link } from 'react-router-dom';
-import { store } from '../../stores/config-store';
 
 interface IReduxProps {
   contracts: IContract[];
@@ -29,6 +28,7 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => {
 
 const mapDispatch = {
   getContractsAsync,
+  push,
 };
 
 const connector = connect(
@@ -52,15 +52,15 @@ export class SideBarContracts extends React.Component<PropsFromRedux> {
   }
 
   private handleContractClick(contract: IContract): void {
-    store.dispatch(push(
+    this.props.push(
       `${this.props.router.location.pathname}?viewType=${ViewTypes.Tasks}` +
-      `&clientId=${this.clientId}&contractId=${contract.id}`));
+        `&clientId=${this.clientId}&contractId=${contract.id}`);
   }
 
   private handleBackClick(): void {
-    store.dispatch(push(
+    this.props.push(
       `${this.props.router.location.pathname}?viewType=${ViewTypes.Clients}`,
-    ));
+    );
   }
 
   private addContractComponentCreator(): JSX.Element | undefined {

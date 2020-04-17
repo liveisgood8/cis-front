@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
 import { Link } from 'react-router-dom';
-import { store } from '../../stores/config-store';
 
 interface IReduxProps {
   clients: IClient[];
@@ -27,6 +26,7 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => ({
 
 const mapDispatch = {
   getClientsAsync,
+  push,
 };
 
 const connector = connect(
@@ -38,8 +38,8 @@ type PropsFromRedux = ConnectedProps<typeof connector>;
 
 export class SideBarClients extends React.Component<PropsFromRedux> {
   private handleClientClick(client: IClient): void {
-    store.dispatch(push(
-      `${this.props.routerPath}?viewType=${ViewTypes.Contracts}&clientId=${client.id}`));
+    this.props.push(
+      `${this.props.routerPath}?viewType=${ViewTypes.Contracts}&clientId=${client.id}`);
   }
 
   private addClientComponentCreator(): JSX.Element | undefined {
