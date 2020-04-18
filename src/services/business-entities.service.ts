@@ -25,12 +25,14 @@ export async function fetchTasks(contractId: number): Promise<ITask[]> {
   return response.data;
 }
 
-export async function fetchSpecificTask(taskId: number): Promise<ITask> {
+export async function fetchSpecificTask(taskId: number): Promise<ITask | undefined> {
   const response = await AxiosService.get(`/tasks/${taskId}`);
-  return {
-    ...(response.data as ITask),
-    doneTo: new Date((response.data as ITask).doneTo),
-  };
+  if (response.status != 204) {
+    return {
+      ...(response.data as ITask),
+      doneTo: new Date((response.data as ITask).doneTo),
+    };
+  }
 }
 
 export async function postClient(client: OmitId<IClient>): Promise<number> {

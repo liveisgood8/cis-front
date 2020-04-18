@@ -44,13 +44,12 @@ export const TaskDetailWithLoading = withLoading(TaskDetails);
 
 export const TaskDetailsContainer: React.FC<RouteComponentProps<{ id: string }>> = (props) => {
   const [task, setTask] = React.useState<ITask>();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const { id } = props.match.params;
 
   React.useEffect(() => {
     (async (): Promise<void> => {
-      setIsLoading(true);
       try {
         const task = await fetchSpecificTask(+id);
         setTask(task);
@@ -63,19 +62,16 @@ export const TaskDetailsContainer: React.FC<RouteComponentProps<{ id: string }>>
 
   return (
     <React.Fragment>
-      {task ? (
-        <TaskDetailWithLoading
-          isLoading={isLoading}
-          task={task}
+      {!task && !isLoading ? (
+        <NotFoundedPage
+          text="Задача не найдена"
         />
       ) : (
-          task === undefined ?
-            undefined : (
-              <NotFoundedPage
-                text="Задача не найдена"
-              />
-            )
-        )}
+        <TaskDetailWithLoading
+          isLoading={isLoading}
+          task={task as ITask}
+        />
+      )}
     </React.Fragment>
   );
 };
