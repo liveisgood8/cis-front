@@ -6,7 +6,7 @@ export const apiBaseUrl = serverBaseUrl + '/api/v1';
 
 export const AxiosService = axios.create({
   baseURL: apiBaseUrl,
-  timeout: 2000,
+  timeout: 5000,
   headers: {
     Authorization: `Bearer ${getAuthenticateData()?.accessToken}`,
   },
