@@ -45,9 +45,9 @@ describe('Pages', () => {
 
     it('call login on submit form', () => {
       const { wrapper, loginMock } = setup();
-      expect(loginMock.mock.calls.length).toBe(0);
+      expect(loginMock).toHaveBeenCalledTimes(0);
       wrapper.find('Form').simulate('submit', formEventMock);
-      expect(loginMock.mock.calls.length).toBe(1);
+      expect(loginMock).toHaveBeenCalledTimes(1);
     });
   });
 });

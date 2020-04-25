@@ -27,7 +27,7 @@ export async function fetchTasks(contractId: number): Promise<ITask[]> {
 
 export async function fetchSpecificTask(taskId: number): Promise<ITask | undefined> {
   const response = await AxiosService.get(`/tasks/${taskId}`);
-  if (response.status != 204) {
+  if (response.status !== 204) {
     return {
       ...(response.data as ITask),
       doneTo: new Date((response.data as ITask).doneTo),

@@ -6,7 +6,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "test:coverage": "npm test -- --coverage --watchAll=false",
+    "coverage": "npm test -- --coverage --watchAll=false --collectCoverageFrom=src/**/* --collectCoverageFrom=!src/routes/* --collectCoverageFrom=!src/services/* --collectCoverageFrom=!src/utils/* --collectCoverageFrom=!src/serviceWorker.ts --collectCoverageFrom=!src/index.tsx",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

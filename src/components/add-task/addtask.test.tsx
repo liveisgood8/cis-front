@@ -37,7 +37,7 @@ describe('add task unit', () => {
 
     expect(fetchClients).toHaveBeenCalled();
     expect(fetchContracts).toHaveBeenCalled();
-    expect(fetchContracts.mock.calls[0][0]).toBe(clientsMock[0].id);
+    expect(fetchContracts).toHaveBeenCalledWith(clientsMock[0].id);
 
     const destructFormGroup = (group: ReactWrapper) => {
       return {
