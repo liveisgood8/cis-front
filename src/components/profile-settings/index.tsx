@@ -67,9 +67,6 @@ export const ProfileSettingsComponent: React.FC<IProps> = (props) => {
       dispatch(setAuthUserImageUrl(image));
     }
     setSubmitting(false);
-    toast.success('Настройка профиля успешно обновлены', {
-      autoClose: 2500,
-    });
   };
 
   return (
