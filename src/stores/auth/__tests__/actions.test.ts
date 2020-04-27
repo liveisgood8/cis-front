@@ -65,6 +65,10 @@ describe('auth actions', () => {
       accessToken: authData.accessToken,
       refreshToken: authData.refreshToken,
     });
+    axiosMock.onGet('/permissions')
+      .replyOnce(200, []);
+    axiosMock.onGet('/business-requests/pending-number')
+      .replyOnce(200, 0);
 
     loginAsync('user', 'password');
     return store.dispatch(loginAsync('user', 'password')).then(() => {

@@ -92,6 +92,7 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
                 />
               </InputGroup>
               <Button
+                id="login-button"
                 type="submit"
                 disabled={this.props.loggingIn}
               >
@@ -103,7 +104,7 @@ export class LoginPage extends React.Component<PropsFromRedux, ILoginPageState> 
             className="d-flex justify-content-center p-2 border rounded shadow-sm bg-white">
             <p className="m-0">
               Нет аккаунта?&nbsp;
-              <Link to={'/registration'}>Зарегистрироваться</Link>
+              <Link id="register-link" to={'/registration'}>Зарегистрироваться</Link>
               .
             </p>
           </Col>

@@ -153,7 +153,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button id="add-request-submit-button" variant="primary" type="submit">
         Зарегистрировать обращение
       </Button>
     </Form>

@@ -94,7 +94,7 @@ export const HandleRequestComponent: React.FC<RouteComponentProps<IMatchParams>>
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit" disabled={isHandling}>
+      <Button id="handle-request-submit-button" variant="primary" type="submit" disabled={isHandling}>
         {isHandling ? 'Обработка обращения...' : 'Отправить ответ'}
       </Button>
     </Form>

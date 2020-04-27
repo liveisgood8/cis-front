@@ -35,13 +35,13 @@ export class SideBarMenu extends React.Component<PropsFromRedux> {
         <ul className="list-unstyled components">
           <p>Основное меню</p>
           <li>
-            <Link to={`${this.props.routerLocation.pathname}?viewType=${ViewTypes.Clients}`}>
+            <Link id="clients-link" to={`${this.props.routerLocation.pathname}?viewType=${ViewTypes.Clients}`}>
               <FontAwesomeIcon icon={faUserFriends} className="icon" />
               Клиенты
             </Link>
           </li>
           <li>
-            <Link to={`/requests${this.props.routerLocation.search}`}>
+            <Link id="requests-link" to={`/requests${this.props.routerLocation.search}`}>
               <FontAwesomeIcon icon={faEnvelopeOpenText} className="icon" />
               Обращения
               <Badge variant="light" className="ml-2">{this.props.pendingBusinessRequestsNumber}</Badge>
@@ -51,7 +51,7 @@ export class SideBarMenu extends React.Component<PropsFromRedux> {
         {this.props.isHasRegisterRequestPermission ?
           <ul className="list-unstyled components">
             <li>
-              <Link to={`/addRequest${this.props.routerLocation.search}`}>
+              <Link id="add-request-link" to={`/addRequest${this.props.routerLocation.search}`}>
                 <FontAwesomeIcon icon={faPaperPlane} className="icon" />
                 Регистрация обращения
               </Link>

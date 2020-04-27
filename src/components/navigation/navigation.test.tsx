@@ -10,6 +10,8 @@ import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { createMemoryHistory } from 'history';
 import { reverseVisibleAction } from '../../stores/sidebar/actions';
 import { act } from 'react-dom/test-utils';
+import { setPendingNumber } from '../../stores/business-requests/actions';
+import { setPermissionsAction } from '../../stores/permissions/actions';
 
 describe('navigation unit', () => {
   (global as any).document.createRange = () => ({
@@ -119,7 +121,16 @@ describe('navigation unit', () => {
     const tooltip = wrapper.find(Tooltip);
     tooltip.find('p').at(1).simulate('click');
 
+    expect(store.getActions()).toHaveLength(3);
     expect(store.getActions()).toEqual([
+      {
+        type: setPendingNumber.toString(),
+        payload: 0,
+      },
+      {
+        type: setPermissionsAction.toString(),
+        payload: [],
+      },
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {

@@ -140,7 +140,7 @@ const AddTaskComponent: React.FC = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button id="add-task-submit-button" variant="primary" type="submit">
         Добавить задачу
       </Button>
     </Form>

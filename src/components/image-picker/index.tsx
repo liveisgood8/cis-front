@@ -39,17 +39,21 @@ export const ImagePickerComponent: React.FC<IProps> = (props) => {
 
   return (
     <div className="d-flex justify-content-center align-items-center mb-3">
-      <FontAwesomeIcon
-        className="change-arrow"
-        icon={faAngleLeft}
-        onClick={onPreviousImage}
-      />
+      <span id="image-picker-previous">
+        <FontAwesomeIcon
+          className="change-arrow"
+          icon={faAngleLeft}
+          onClick={onPreviousImage}
+        />
+      </span>
       <Image className="profile-image" src={props.imageUrlList[imageIndex]} roundedCircle />
-      <FontAwesomeIcon
-        className="change-arrow"
-        icon={faAngleRight}
-        onClick={onNextImage}
-      />
+      <span id="image-picker-next">
+        <FontAwesomeIcon
+          className="change-arrow"
+          icon={faAngleRight}
+          onClick={onNextImage}
+        />
+      </span>
     </div>
   );
 };

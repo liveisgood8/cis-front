@@ -133,7 +133,7 @@ export const AddContractComponent: React.FC = () => {
         </Form.Label>
       </FormGroup>
 
-      <Button variant="primary" type="submit">
+      <Button id="add-contract-submit-button" variant="primary" type="submit">
         Добавить договор
       </Button>
     </Form>

@@ -17,7 +17,7 @@ export default function HomePage(): JSX.Element {
           ...location,
           pathname: '/addClient',
         })}>
-          <Button className="mt-5">Добавить клиента</Button>
+          <Button id="add-client" className="mt-5">Добавить клиента</Button>
         </Link>
       </div>
       <footer className="mt-auto align-self text-center">

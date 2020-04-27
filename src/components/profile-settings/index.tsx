@@ -119,6 +119,7 @@ export const ProfileSettingsComponent: React.FC<IProps> = (props) => {
         />
       </InputGroup>
       <Button
+        id="profile-submit-button"
         type="submit"
         disabled={isSubmitting}
       >

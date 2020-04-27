@@ -48,7 +48,7 @@ export class SideBarClients extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <Link to={`/addClient?viewType=${ViewTypes.Clients}`}>
+        <Link id="add-client-link" to={`/addClient?viewType=${ViewTypes.Clients}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить клиента
         </Link>

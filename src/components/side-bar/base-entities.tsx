@@ -37,7 +37,7 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
     return this.props.entities.map((e, i) => {
       return (
         <li key={i}>
-          <button onClick={(): void => this.props.entityClickHandler(e)}>{e.name}</button>
+          <button id={`entity-${i}`} onClick={(): void => this.props.entityClickHandler(e)}>{e.name}</button>
         </li>
       );
     });
@@ -47,7 +47,7 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
     const moveToPreviousElement = this.props.moveToPreviousList && this.props.previousListName ?
       (
         <li>
-          <button onClick={this.props.moveToPreviousList}>
+          <button id="previous-level-button" onClick={this.props.moveToPreviousList}>
             <FontAwesomeIcon icon={faArrowLeft} className="icon" />
             {this.props.previousListName}
           </button>
@@ -59,7 +59,7 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
       <div>
         <p>{this.props.listName}</p>
         <li>
-          <button onClick={this.handleMenuClick.bind(this)}>
+          <button id="menu-level-button" onClick={this.handleMenuClick.bind(this)}>
             <FontAwesomeIcon icon={faBars} className="icon" />
             В меню
           </button>
@@ -83,7 +83,7 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
         <ul className="list-unstyled components">
           {this.createControlMenu()}
         </ul>
-        <ul className="list-unstyled components">
+        <ul id="entities-list" className="list-unstyled components">
           {this.createEntities()}
           {this.props.addEntityComponent}
         </ul>

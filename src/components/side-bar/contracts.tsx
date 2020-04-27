@@ -69,7 +69,7 @@ export class SideBarContracts extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <Link to={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
+        <Link id="add-contract-link" to={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить договор
         </Link>

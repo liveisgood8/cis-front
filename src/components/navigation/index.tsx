@@ -8,8 +8,8 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { reverseVisibleAction } from '../../stores/sidebar/actions';
-import { logout } from '../../services/auth.service';
 import { IApplicationState } from '../../stores/config-reducers';
+import { logoutThunk } from '../../stores/auth/actions';
 
 
 const NavigationBar: React.SFC = () => {
@@ -21,8 +21,7 @@ const NavigationBar: React.SFC = () => {
   };
 
   const onLogout = (): void => {
-    logout();
-    dispatch(push('/login'));
+    dispatch(logoutThunk());
   };
 
   const onProfile = (): void => {
@@ -31,17 +30,17 @@ const NavigationBar: React.SFC = () => {
 
   const userMenu = (
     <Tooltip id="overlay-example">
-      <p onClick={onProfile}>Профиль</p>
-      <p onClick={onLogout}>Выход</p>
+      <p id="profile-menu-element" onClick={onProfile}>Профиль</p>
+      <p id="exit-menu-element" onClick={onLogout}>Выход</p>
     </Tooltip>
   );
 
   return (
     <Navbar className="main-header">
-      <button className="menu-button" onClick={reverseSideBarVisible}>
+      <button id="menu-button" onClick={reverseSideBarVisible}>
         <FontAwesomeIcon icon={faBars} color="white" />
       </button>
-      <Link to="/" className="product-label">
+      <Link id="home-link" to="/" className="product-label">
         <h4 className="m-0">QCRM</h4>
       </Link>
       <div className="profile-image-container ml-auto">

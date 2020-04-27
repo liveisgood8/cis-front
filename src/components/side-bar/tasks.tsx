@@ -69,7 +69,7 @@ export class SideBarTasks extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <Link to={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+        <Link id="add-task-link" to={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить задачу
         </Link>

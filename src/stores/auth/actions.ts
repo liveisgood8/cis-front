@@ -1,10 +1,12 @@
-import { login, register } from '../../services/auth.service';
+import { login, register, logout } from '../../services/auth.service';
 import { createAction } from '@reduxjs/toolkit';
 import { IAuthData } from './types';
 import { push } from 'connected-react-router';
 import { AxiosError } from 'axios';
 import { AppThunkAction } from '../../types';
 import { handleAxiosError } from '../../utils/axios';
+import { fetchPermissions, setPermissionsAction } from '../permissions/actions';
+import { fetchPendingNumber, setPendingNumber } from '../business-requests/actions';
 
 export const setAuthUserImageUrl = createAction<string>('@@auth/setAuthUserImageUrl');
 
@@ -26,6 +28,8 @@ export const loginAsync = (
   return login(username, password)
     .then((authData) => {
       dispatch(loginSuccessAction(authData));
+      dispatch(fetchPendingNumber());
+      dispatch(fetchPermissions());
       dispatch(push('/'));
     })
     .catch((err: AxiosError) => {
@@ -33,6 +37,13 @@ export const loginAsync = (
       dispatch(loginFailedAction());
       handleAxiosError(err, 'Неизвестная ошибка при аутентификации');
     });
+};
+
+export const logoutThunk = (): AppThunkAction<Promise<void>> => async (dispatch): Promise<void> => {
+  logout();
+  dispatch(setPendingNumber(0));
+  dispatch(setPermissionsAction([]));
+  dispatch(push('/login'));
 };
 
 export const registerAsync = (

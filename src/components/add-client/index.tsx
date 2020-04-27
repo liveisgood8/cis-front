@@ -87,7 +87,7 @@ const AddClientComponent: React.FC = () => {
         />
       </Form.Group>
 
-      <Button variant="primary" type="submit">
+      <Button id="add-client-submit-button" variant="primary" type="submit">
         Добавить клиента
       </Button>
     </Form>

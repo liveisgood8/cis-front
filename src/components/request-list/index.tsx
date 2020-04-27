@@ -29,6 +29,7 @@ export const RequestListComponent: React.SFC = () => {
                 <h5>Текст обращения</h5>
                 <p>{e.message}</p>
                 <Button
+                  id="show-request-button"
                   variant="primary"
                   className="align-self-end"
                   onClick={() => dispatch(push(`/handleRequest/${e.id}`))}>Обработать</Button>
