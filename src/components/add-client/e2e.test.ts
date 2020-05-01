@@ -18,9 +18,9 @@ test('add client component e2e', async () => {
   await page.type('.flex-grow-1 > .d-flex > form > .mb-3:nth-child(3) > .form-control', 'admin');
 
   await page.waitForSelector('.d-flex #login-button');
-  await page.click('.d-flex #login-button');
 
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+  await page.click('.d-flex #login-button');
+  await page.waitFor(2500);
 
   expect(await page.$eval('#clients-link', (e) => e.innerHTML)).toContain('Клиенты');
 
@@ -41,10 +41,9 @@ test('add client component e2e', async () => {
 
   await page.waitForSelector('#root #add-client-submit-button');
   await page.click('#root #add-client-submit-button');
-
-  await page.waitForResponse((response) => response.request().url().indexOf('api/v1/clients') !== -1);
+  await page.waitFor(2500);
 
   expect(await page.$eval('#entities-list', (e) => e.innerHTML)).toContain(clientName);
 
   await browser.close();
-}, 60000);
+}, 30000);

@@ -7,6 +7,7 @@ test('register page success e2e', async () => {
 
   await page.setViewport({ width: 1745, height: 852 });
 
+  // Go to register page from login
   await page.waitForSelector('.d-flex #register-link');
   await page.click('.d-flex #register-link');
 
@@ -27,7 +28,7 @@ test('register page success e2e', async () => {
   await page.waitForSelector('.d-flex #profile-submit-button');
   await page.click('.d-flex #profile-submit-button');
 
-  await page.waitForNavigation({ waitUntil: 'networkidle0' });
+  await page.waitFor(2500);
 
   expect(await page.$eval('#login-button', ((e) => e.innerHTML))).toContain('Вход');
   expect(await page.$eval('#register-link', ((e) => e.getAttribute('href')))).toEqual('/registration');

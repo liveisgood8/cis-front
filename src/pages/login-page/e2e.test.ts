@@ -18,7 +18,7 @@ test('login page success login e2e', async () => {
   await page.waitForSelector('.d-flex #login-button');
   await page.click('.d-flex #login-button');
 
-  await page.waitForNavigation({ waitUntil: 'networkidle0' }),
+  await page.waitFor(2500);
 
   expect(await page.$eval('#home-link', ((e) => e.innerHTML))).toContain('QCRM');
   expect(await page.$eval('#clients-link', ((e) => e.getAttribute('href')))).toEqual('/?viewType=1');
