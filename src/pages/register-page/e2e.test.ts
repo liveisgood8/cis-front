@@ -28,10 +28,10 @@ test('register page success e2e', async () => {
   await page.waitForSelector('.d-flex #profile-submit-button');
   await page.click('.d-flex #profile-submit-button');
 
-  await page.waitFor(2500);
+  await page.waitFor(10000);
 
   expect(await page.$eval('#login-button', ((e) => e.innerHTML))).toContain('Вход');
   expect(await page.$eval('#register-link', ((e) => e.getAttribute('href')))).toEqual('/registration');
 
   await browser.close();
-}, 30000);
+}, 40000);

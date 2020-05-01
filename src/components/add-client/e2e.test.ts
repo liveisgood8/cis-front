@@ -20,7 +20,7 @@ test('add client component e2e', async () => {
   await page.waitForSelector('.d-flex #login-button');
 
   await page.click('.d-flex #login-button');
-  await page.waitFor(2500);
+  await page.waitFor(10000);
 
   expect(await page.$eval('#clients-link', (e) => e.innerHTML)).toContain('Клиенты');
 
@@ -41,9 +41,9 @@ test('add client component e2e', async () => {
 
   await page.waitForSelector('#root #add-client-submit-button');
   await page.click('#root #add-client-submit-button');
-  await page.waitFor(2500);
+  await page.waitFor(10000);
 
   expect(await page.$eval('#entities-list', (e) => e.innerHTML)).toContain(clientName);
 
   await browser.close();
-}, 30000);
+}, 50000);
