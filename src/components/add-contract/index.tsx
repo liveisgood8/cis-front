@@ -26,12 +26,15 @@ export const AddContractComponent: React.FC = () => {
     (async (): Promise<void> => {
       setIsLoading(true);
       await dispatch(getClientsAsync());
-      if (clients.length) {
-        setClient(clients[0]);
-      }
       setIsLoading(false);
     })();
   }, [dispatch]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (clients.length) {
+      setClient(clients[0]);
+    }
+  }, [clients]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
@@ -127,6 +130,7 @@ export const AddContractComponent: React.FC = () => {
           className="custom-file-input"
           style={{ cursor: 'pointer' }}
           onChange={handleScanFileChange}
+          required
         />
         <Form.Label className="custom-file-label" data-browse="Выбрать файл">
           {scanFile ? scanFile.name : 'Выберите копию договора'}

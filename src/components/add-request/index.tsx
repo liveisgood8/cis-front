@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 import { handleAxiosError } from '../../utils/axios';
 import { Form, Button } from 'react-bootstrap';
 import { IUser } from '../../stores/auth/types';
@@ -71,6 +72,7 @@ export const AddRequestComponent: React.FC<{}> = () => {
       if (selectedUser && selectedUser.id === getAuthenticateData()?.user.id) {
         dispatch(increasePendingNumber());
       }
+      toast.success('Обращение успешно зарегистрировано!');
     } catch (err) {
       handleAxiosError(err, 'Не удалось добавить обращение');
     }
