@@ -59,8 +59,11 @@ export class SideBarTasks extends React.Component<PropsFromRedux> {
   }
 
   private handleBackClick(): void {
-    this.props.push(
-      `${this.props.router.location.pathname}?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`);
+    const urlSearchParams = new URLSearchParams(this.props.router.location.search);
+    urlSearchParams.set('viewType', ViewTypes.Contracts.toString());
+    urlSearchParams.set('clientId', this.clientId ? this.clientId.toString() : '0');
+    urlSearchParams.delete('contractId');
+    this.props.push(`${this.props.router.location.pathname}?${urlSearchParams.toString()}`);
   }
 
   private addTaskComponentCreator(): JSX.Element | undefined {
@@ -69,7 +72,7 @@ export class SideBarTasks extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <Link id="add-task-link" to={`/addTask?viewType=${ViewTypes.Tasks}&clientId=${this.clientId}&contractId=${this.contractId}`}>
+        <Link id="add-task-link" to={`/addTask${this.props.router.location.search}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить задачу
         </Link>

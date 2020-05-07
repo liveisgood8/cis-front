@@ -35,7 +35,14 @@ export class SideBarMenu extends React.Component<PropsFromRedux> {
         <ul className="list-unstyled components">
           <p>Основное меню</p>
           <li>
-            <Link id="clients-link" to={`${this.props.routerLocation.pathname}?viewType=${ViewTypes.Clients}`}>
+            <Link id="clients-link" to={(location) => {
+              const urlSearchParams = new URLSearchParams(location.search);
+              urlSearchParams.set('viewType', ViewTypes.Clients.toString());
+              return {
+                ...location,
+                search: '?' + urlSearchParams.toString(),
+              };
+            }}>
               <FontAwesomeIcon icon={faUserFriends} className="icon" />
               Клиенты
             </Link>

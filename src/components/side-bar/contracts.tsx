@@ -52,14 +52,19 @@ export class SideBarContracts extends React.Component<PropsFromRedux> {
   }
 
   private handleContractClick(contract: IContract): void {
-    this.props.push(
-      `${this.props.router.location.pathname}?viewType=${ViewTypes.Tasks}` +
-        `&clientId=${this.clientId}&contractId=${contract.id}`);
+    const urlSearchParams = new URLSearchParams(this.props.router.location.search);
+    urlSearchParams.set('viewType', ViewTypes.Tasks.toString());
+    urlSearchParams.set('clientId', this.clientId ? this.clientId.toString() : '0');
+    urlSearchParams.set('contractId', contract.id.toString());
+    this.props.push(`${this.props.router.location.pathname}?${urlSearchParams.toString()}`);
   }
 
   private handleBackClick(): void {
+    const urlSearchParams = new URLSearchParams(this.props.router.location.search);
+    urlSearchParams.set('viewType', ViewTypes.Clients.toString());
+    urlSearchParams.delete('clientId');
     this.props.push(
-      `${this.props.router.location.pathname}?viewType=${ViewTypes.Clients}`,
+      `${this.props.router.location.pathname}?${urlSearchParams.toString()}`,
     );
   }
 
@@ -69,7 +74,7 @@ export class SideBarContracts extends React.Component<PropsFromRedux> {
     }
     return (
       <li>
-        <Link id="add-contract-link" to={`/addContract?viewType=${ViewTypes.Contracts}&clientId=${this.clientId}`}>
+        <Link id="add-contract-link" to={`/addContract${this.props.router.location.search}`}>
           <FontAwesomeIcon icon={faPlus} className="icon" />
           Добавить договор
         </Link>

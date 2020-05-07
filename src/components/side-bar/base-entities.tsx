@@ -30,7 +30,11 @@ export class BaseEntitiesList<EntityType extends IBaseBusinessEntity>
 
   private handleMenuClick(): void {
     const location = getLocation(store.getState());
-    store.dispatch(push(`${location.pathname}?viewType=${ViewTypes.Menu}`));
+
+    const urlSearchParam = new URLSearchParams(location.search);
+    urlSearchParam.set('viewType', ViewTypes.Menu.toString());
+
+    store.dispatch(push(`${location.pathname}?${urlSearchParam.toString()}`));
   }
 
   private createEntities(): JSX.Element[] {

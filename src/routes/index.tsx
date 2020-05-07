@@ -16,6 +16,7 @@ import { HandleRequestComponent } from '../components/handle-request';
 import { AddRequestComponent } from '../components/add-request';
 import { AuthProfileSettingsComponent } from '../components/profile-settings/auth-profile-settings';
 import { TaskDetailsContainer } from '../components/task-details';
+import { SearchContainer } from '../components/search-container';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -35,6 +36,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/handleRequest/:id" component={HandleRequestComponent} />
       <PrivateLayoutRoute exact path="/task/:id" component={TaskDetailsContainer} />
       <PrivateLayoutRoute exact path="/profile" component={AuthProfileSettingsComponent} />
+      <PrivateLayoutRoute exact path="/search" component={SearchContainer} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>
