@@ -74,6 +74,7 @@ export const SearchResultContainer: React.FC = () => {
           'Договор': e.contract?.name,
           'sep': '---',
           'Сообщение': e.message,
+          'Обработано': e.isHandled ? 'да' : 'нет',
         }} />
       ))}
       {isSearchResultEmpty() &&
