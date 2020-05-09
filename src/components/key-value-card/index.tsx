@@ -5,7 +5,7 @@ import { Card } from 'react-bootstrap';
 
 interface IKeyValueCardProps {
   title: string;
-  values: { [name: string]: string | '---' };
+  values: { [name: string]: string | '---' | undefined };
 }
 
 export const KeyValueCard: React.SFC<IKeyValueCardProps> = ({ title, values }) => {
@@ -15,12 +15,14 @@ export const KeyValueCard: React.SFC<IKeyValueCardProps> = ({ title, values }) =
     for (let i = 0; i < keys.length; i++) {
       const key = keys[i];
       const value = values[key];
-      if (value === '---') {
+      if (value === '---' || !value) {
         continue;
       }
 
       elements.push((
-        <div key={i} className={(i + 1) < keys.length && values[keys[i + 1]] === '---' ? 'bottom-splitter' : 'pt-10px'}>
+        <div key={i} className={(i + 2) < keys.length && values[keys[i + 1]] === '---' && values[keys[i + 2]] ?
+          'bottom-splitter' : 'pt-10px'}
+        >
           <strong className="mr-2">{key}:</strong>
           <span>{values[key]}</span>
         </div>
@@ -32,7 +34,7 @@ export const KeyValueCard: React.SFC<IKeyValueCardProps> = ({ title, values }) =
   return (
     <Card className="mb-3">
       <Card.Header>
-        <h4>{title}</h4>
+        <h5>{title}</h5>
       </Card.Header>
       <Card.Body>
         {getBodyElements()}

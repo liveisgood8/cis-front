@@ -9,6 +9,8 @@ import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { isHasPermissionSelectorFactory } from '../../stores/permissions/selectors';
 import { UserPermissions } from '../../stores/permissions/types';
+import { SearchComponent } from '../search-component';
+import { push } from 'connected-react-router';
 
 interface IReduxProps {
   routerLocation: Location;
@@ -22,8 +24,13 @@ const mapStateToProps = (state: IApplicationState): IReduxProps => ({
   isHasRegisterRequestPermission: isHasPermissionSelectorFactory(UserPermissions.REGISTER_REQUEST)(state),
 });
 
+const mapDispatch = {
+  push,
+};
+
 const connector = connect(
   mapStateToProps,
+  mapDispatch,
 );
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
@@ -33,7 +40,15 @@ export class SideBarMenu extends React.Component<PropsFromRedux> {
     return (
       <div>
         <ul className="list-unstyled components">
-          <p>Основное меню</p>
+          <li>
+            <SearchComponent
+              onSearch={(query): void => {
+                console.log('test');
+                this.props.push(`/search?query=${query}`);
+              }}
+            />
+          </li>
+          <p className="pb-0">Основное меню</p>
           <li>
             <Link id="clients-link" to={(location) => {
               const urlSearchParams = new URLSearchParams(location.search);

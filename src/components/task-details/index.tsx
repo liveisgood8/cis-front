@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Card } from 'react-bootstrap';
+import { KeyValueCard } from '../key-value-card'
 import { ITask } from '../../stores/business-entities/types';
 import { fetchSpecificTask } from '../../services/business-entities.service';
 import { RouteComponentProps } from 'react-router-dom';
@@ -11,33 +11,18 @@ import './styles.css';
 
 export const TaskDetails: React.SFC<{ task: ITask }> = ({ task }) => {
   return (
-    <Card style={{ flexGrow: 1, height: 'fit-content' }}>
-      <Card.Header>
-        <h3>Информация о задаче</h3>
-      </Card.Header>
-      <Card.Body>
-        <div className="bottom-splitter">
-          <strong className="mr-2">Имя задачи:</strong>
-          <span>{task.name}</span>
-        </div>
-        <div className="pt-10px">
-          <strong className="mr-2">Клиент:</strong>
-          <span>{task.contract?.client?.name}</span>
-        </div>
-        <div className="bottom-splitter">
-          <strong className="mr-2">Договор:</strong>
-          <span>{task.contract?.name}</span>
-        </div>
-        <div className="pt-10px">
-          <strong className="mr-2">Выполнить до:</strong>
-          <span>{task.doneTo.toLocaleDateString()}</span>
-        </div>
-        <div>
-          <strong className="mr-2">Описание:</strong>
-          <span>{task.description}</span>
-        </div>
-      </Card.Body>
-    </Card>
+    <KeyValueCard
+      title="Информация о задаче"
+      values={{
+        'Имя задачи': task.name,
+        'sep': '---',
+        'Клиент': task.contract?.client?.name as string,
+        'Договор': task.contract?.name as string,
+        'sep1': '---',
+        'Выполнить до': task.doneTo.toLocaleDateString(),
+        'Описание': task.description,
+      }}
+    />
   );
 };
 export const TaskDetailWithLoading = withLoading(TaskDetails);

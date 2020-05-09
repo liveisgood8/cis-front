@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { History } from 'history';
 import { ConnectedRouter } from 'connected-react-router';
-import HomePage from '../pages/home-page';
+import { HomePage } from '../pages/home-page';
 import LoginPage from '../pages/login-page';
 import { NotFoundedPage } from '../pages/not-founded-page';
 import { PrivateLayoutRoute } from './private-layout-route';
@@ -16,7 +16,7 @@ import { HandleRequestComponent } from '../components/handle-request';
 import { AddRequestComponent } from '../components/add-request';
 import { AuthProfileSettingsComponent } from '../components/profile-settings/auth-profile-settings';
 import { TaskDetailsContainer } from '../components/task-details';
-import { SearchContainer } from '../components/search-container';
+import { SearchResultContainer } from '../components/search-result-container';
 
 interface IRoutesProps {
   browserHistory: History;
@@ -36,7 +36,7 @@ const Routes: React.SFC<IRoutesProps> = (props) => (
       <PrivateLayoutRoute exact path="/handleRequest/:id" component={HandleRequestComponent} />
       <PrivateLayoutRoute exact path="/task/:id" component={TaskDetailsContainer} />
       <PrivateLayoutRoute exact path="/profile" component={AuthProfileSettingsComponent} />
-      <PrivateLayoutRoute exact path="/search" component={SearchContainer} />
+      <PrivateLayoutRoute exact path="/search" component={SearchResultContainer} />
       <Route path='*' exact component={NotFoundedPage} />
     </Switch>
   </ConnectedRouter>

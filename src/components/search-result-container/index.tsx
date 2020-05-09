@@ -6,8 +6,10 @@ import { useSelector } from 'react-redux';
 import { IApplicationState } from '../../stores/config-reducers';
 import { toast } from 'react-toastify';
 import { KeyValueCard } from '../key-value-card';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFrown } from '@fortawesome/free-solid-svg-icons';
 
-export const SearchContainer: React.FC = () => {
+export const SearchResultContainer: React.FC = () => {
   const [clients, setClients] = useState<IClient[]>([]);
   const [contracts, setContracts] = useState<IContract[]>([]);
   const [tasks, setTasks] = useState<ITask[]>([]);
@@ -32,35 +34,56 @@ export const SearchContainer: React.FC = () => {
     })();
   }, [locationSearch]);
 
+  const isSearchResultEmpty = (): boolean => {
+    return !clients.length && !contracts.length && !tasks.length && !requests.length;
+  };
+
   return (
     <div className="flex-grow-1">
       {clients.map((e, i) => (
-        <KeyValueCard key={i} title={e.name} values={{
-          'Электронный адрес': e.email as string,
-          'Физический адрес': e.address as string,
+        <KeyValueCard key={i} title={'Клиент: ' + e.name} values={{
+          'Электронный адрес': e.email,
+          'Физический адрес': e.address,
           'sep': '---',
-          'Комментарий': e.comment as string,
+          'Комментарий': e.comment,
         }} />
       ))}
       {contracts.map((e, i) => (
-        <KeyValueCard key={i} title={e.name} values={{
-          'Дата заключения': new Date(e.conclusionDate).toLocaleDateString(),
+        <KeyValueCard key={i} title={'Договор: ' + e.name} values={{
+          'Клиент': e.client?.name,
           'sep': '---',
-          'Комментарий': e.comment as string,
+          'Дата заключения': new Date(e.conclusionDate).toLocaleDateString(),
+          'sep1': '---',
+          'Комментарий': e.comment,
         }} />
       ))}
       {tasks.map((e, i) => (
-        <KeyValueCard key={i} title={e.name} values={{
-          'Выполнить до': new Date(e.doneTo).toLocaleDateString(),
+        <KeyValueCard key={i} title={'Задача: ' + e.name} values={{
+          'Имя задачи': e.name,
           'sep': '---',
-          'Описание': e.description as string,
+          'Клиент': e.contract?.client?.name,
+          'Договор': e.contract?.name,
+          'sep1': '---',
+          'Выполнить до': new Date(e.doneTo).toLocaleDateString(),
+          'Описание': e.description,
         }} />
       ))}
       {requests.map((e, i) => (
-        <KeyValueCard key={i} title={e.title} values={{
+        <KeyValueCard key={i} title={'Обращение: ' + e.title} values={{
+          'Клиент': e.contract?.client?.name,
+          'Договор': e.contract?.name,
+          'sep': '---',
           'Сообщение': e.message,
         }} />
       ))}
+      {isSearchResultEmpty() &&
+        <div className="d-flex justify-content-center align-items-center h-100">
+          <div style={{ fontSize: '1.5em' }}>
+            <FontAwesomeIcon className="mr-2" color="#7386D5" icon={faFrown} />
+            <span>По вашему запросу ничего не найдено!</span>
+          </div>
+        </div>
+      }
     </div>
   );
 };
