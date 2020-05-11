@@ -55,7 +55,7 @@ describe('add contract unit', () => {
 
     const copyFileGroup = formGroups.at(4);
     expect(copyFileGroup.find(Form.Label).text()).toEqual('Выберите копию договора');
-    expect(copyFileGroup.find(Form.Control).prop('required')).toBeFalsy();
+    expect(copyFileGroup.find(Form.Control).prop('required')).toBeTruthy();
     expect(copyFileGroup.find(Form.Control).prop('type')).toEqual('file');
 
     const submitButton = wrapper.find(Button);
