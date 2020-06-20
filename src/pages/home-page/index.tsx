@@ -32,7 +32,7 @@ export const HomePage: React.FC = () => {
             ...location,
             pathname: '/requests',
           })}>
-            <Button id="add-client" className="mt-5">Просмотреть обращения</Button> :
+            <Button id="add-client" className="mt-5">Просмотреть обращения</Button>
           </Link>
         )}
       </div>
