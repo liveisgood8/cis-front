@@ -11,18 +11,20 @@ import './styles.css';
 
 export const TaskDetails: React.SFC<{ task: ITask }> = ({ task }) => {
   return (
-    <KeyValueCard
-      title="Информация о задаче"
-      values={{
-        'Имя задачи': task.name,
-        'sep': '---',
-        'Клиент': task.contract?.client?.name as string,
-        'Договор': task.contract?.name as string,
-        'sep1': '---',
-        'Выполнить до': task.doneTo.toLocaleDateString(),
-        'Описание': task.description,
-      }}
-    />
+    <div className="flex-grow-1">
+      <KeyValueCard
+        title="Информация о задаче"
+        values={{
+          'Имя задачи': task.name,
+          'sep': '---',
+          'Клиент': task.contract?.client?.name as string,
+          'Договор': task.contract?.name as string,
+          'sep1': '---',
+          'Выполнить до': task.doneTo.toLocaleDateString(),
+          'Описание': task.description,
+        }}
+      />
+    </div>
   );
 };
 export const TaskDetailWithLoading = withLoading(TaskDetails);
