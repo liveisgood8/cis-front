@@ -25,7 +25,7 @@ export const HomePage: React.FC = () => {
             ...location,
             pathname: '/addClient',
           })}>
-            <Button id="add-client" className="mt-5">Добавить клиента</Button> :
+            <Button id="add-client" className="mt-5">Добавить клиента</Button>
           </Link>
         ) : (
           <Link to={(location) => ({
